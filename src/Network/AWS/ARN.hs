@@ -1,6 +1,9 @@
-{-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE DeriveAnyClass         #-}
+{-# LANGUAGE DeriveGeneric          #-}
+{-# LANGUAGE DeriveTraversable      #-}
+{-# LANGUAGE OverloadedStrings      #-}
+{-# LANGUAGE RankNTypes             #-}
+{-# LANGUAGE TemplateHaskell        #-}
 {-# OPTIONS_HADDOCK show-extensions #-}
 
 -- |
@@ -23,7 +26,30 @@
 -- situations, the 'colons' and 'slashes' @Iso@s provided here are
 -- helpful.
 --
--- == Example
+-- == Service-Specific ARNs
+--
+-- Modules like "Network.AWS.ARN.Lambda" provide types to parse the
+-- resource part of an ARN into something more specific:
+--
+-- @
+-- -- Returns: Just "the-coolest-function-ever"
+-- let
+--   functionARN = "arn:aws:lambda:us-east-1:123456789012:function:the-coolest-function-ever:Alias"
+-- in
+--   functionARN ^? _ARN . arnResource . Lambda._Function . Lambda.fName
+-- @
+--
+-- 'ARN' has a 'Traversable' instance, so it's also possible to
+-- assemble prisms for these more specific ARN types. Use
+-- 'Control.Lens.Prism.below':
+--
+-- @
+-- '_ARN' . 'Control.Lens.Prism.below' Lambda._Function :: 'Prism'' 'Text' ('ARN' Lambda.Function)
+-- @
+--
+-- PRs to add parsers for more resource types are **especially** welcome.
+--
+-- == Examples
 --
 -- [API Gateway Lambda
 -- Authorizers](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html)
@@ -44,16 +70,16 @@
 -- @
 module Network.AWS.ARN
   ( ARN (..),
-    fromText,
-    toText,
+    toARN,
+    fromARN,
 
     -- * ARN Optics
     _ARN,
-    partition,
-    service,
-    region,
-    account,
-    resource,
+    arnPartition,
+    arnService,
+    arnRegion,
+    arnAccount,
+    arnResource,
 
     -- * Utility Optics
     colons,
@@ -61,95 +87,64 @@ module Network.AWS.ARN
   )
 where
 
-import Data.Profunctor (Choice (..), Profunctor (..))
+import Control.Lens (Iso', Prism', iso, makeLenses, prism')
+import Data.Hashable (Hashable)
 import Data.Text (Text)
 import qualified Data.Text as T
 import GHC.Generics (Generic)
 
-data ARN = ARN
-  { _partition :: Text,
-    _service :: Text,
-    _region :: Text,
-    _account :: Text,
-    _resource :: Text
+data ARN r = ARN
+  { _arnPartition :: Text,
+    _arnService :: Text,
+    _arnRegion :: Text,
+    _arnAccount :: Text,
+    _arnResource :: r
   }
-  deriving (Eq, Show, Generic)
+  deriving (Eq, Ord, Show, Generic, Hashable, Functor, Foldable, Traversable)
 
-fromText :: Text -> Maybe ARN
-fromText t = case T.splitOn ":" t of
+$(makeLenses ''ARN)
+
+toARN :: Text -> Maybe (ARN Text)
+toARN t = case T.splitOn ":" t of
   ("arn" : part : srv : reg : acc : res) ->
     Just $
       ARN
-        { _partition = part,
-          _service = srv,
-          _region = reg,
-          _account = acc,
-          _resource = T.intercalate ":" res
+        { _arnPartition = part,
+          _arnService = srv,
+          _arnRegion = reg,
+          _arnAccount = acc,
+          _arnResource = T.intercalate ":" res
         }
   _ -> Nothing
 
-toText :: ARN -> Text
-toText arn =
+fromARN :: ARN Text -> Text
+fromARN arn =
   T.intercalate
     ":"
     [ "arn",
-      _partition arn,
-      _service arn,
-      _region arn,
-      _account arn,
-      _resource arn
+      _arnPartition arn,
+      _arnService arn,
+      _arnRegion arn,
+      _arnAccount arn,
+      _arnResource arn
     ]
 
-type Lens' s a = forall f. Functor f => (a -> f a) -> s -> f s
-
-type Prism' s a =
-  forall p f. (Choice p, Applicative f) => p a (f a) -> p s (f s)
-
-type Iso' s a =
-  forall p f. (Profunctor p, Functor f) => p a (f a) -> p s (f s)
-
+_ARN :: Prism' Text (ARN Text)
+_ARN = prism' fromARN toARN
 {-# INLINE _ARN #-}
-_ARN :: Prism' Text ARN
-_ARN =
-  dimap
-    (\t -> maybe (Left t) Right $ fromText t)
-    (either pure (fmap toText))
-    . right'
-
-{-# INLINE partition #-}
-partition :: Lens' ARN Text
-partition f arn = (\t -> arn {_partition = t}) <$> f (_partition arn)
-
-{-# INLINE service #-}
-service :: Lens' ARN Text
-service f arn = (\t -> arn {_service = t}) <$> f (_service arn)
-
-{-# INLINE region #-}
-region :: Lens' ARN Text
-region f arn = (\t -> arn {_region = t}) <$> f (_region arn)
-
-{-# INLINE account #-}
-account :: Lens' ARN Text
-account f arn = (\t -> arn {_account = t}) <$> f (_account arn)
-
-{-# INLINE resource #-}
-resource :: Lens' ARN Text
-resource f arn = (\t -> arn {_resource = t}) <$> f (_resource arn)
-
-{-# INLINE colons #-}
 
 -- | Split a 'Text' into colon-separated parts.
 --
 -- >>> "foo:bar:baz" & colons . ix 1 .~ "quux"
 -- "foo:quux:baz"
 colons :: Iso' Text [Text]
-colons = dimap (T.splitOn ":") (fmap (T.intercalate ":"))
-
-{-# INLINE slashes #-}
+colons = iso (T.splitOn ":") (T.intercalate ":")
+{-# INLINE colons #-}
 
 -- | Split a 'Text' into slash-separated parts.
 --
 -- >>> "foo/bar/baz" ^. slashes
 -- ["foo", "bar", "baz"]
 slashes :: Iso' Text [Text]
-slashes = dimap (T.splitOn "/") (fmap (T.intercalate "/"))
+slashes = iso (T.splitOn "/") (T.intercalate "/")
+{-# INLINE slashes #-}

@@ -2,10 +2,7 @@
 
 module Main where
 
-import Data.Functor.Const (Const (..))
-import Data.Functor.Identity (Identity (..))
-import Data.Monoid (First (..))
-import Data.Tagged (Tagged (..))
+import Control.Lens (over, preview, review)
 import Data.Text (Text)
 import Network.AWS.ARN
 import Test.Tasty
@@ -21,14 +18,14 @@ tests =
     [ testGroup
         "basic tests"
         [ testCase "inspect function name and alias of Lambda ARN" $
-            (_resource <$> fromText aliasedLambdaSampleARN)
+            (_arnResource <$> toARN aliasedLambdaSampleARN)
               @?= Just "function:the-coolest-function-ever:Alias",
           testCase "parses empty region OK" $
-            (_region <$> fromText s3FileSampleARN) @?= Just "",
+            (_arnRegion <$> toARN s3FileSampleARN) @?= Just "",
           testCase "parses empty account OK" $
-            (_account <$> fromText s3FileSampleARN) @?= Just "",
+            (_arnAccount <$> toARN s3FileSampleARN) @?= Just "",
           testCase "rejects non-ARNs" $
-            fromText sampleNotAnARN @?= Nothing
+            toARN sampleNotAnARN @?= Nothing
         ],
       testGroup
         "optic tests"
@@ -36,7 +33,7 @@ tests =
             (review _ARN <$> preview _ARN authorizerSampleARN)
               @?= Just authorizerSampleARN,
           testCase "edit path of Lambda Authorizer ARN" $
-            over (_ARN . resource . slashes) (\parts -> take 2 parts ++ ["*"]) authorizerSampleARN
+            over (_ARN . arnResource . slashes) (\parts -> take 2 parts ++ ["*"]) authorizerSampleARN
               @?= "arn:aws:execute-api:us-east-1:123456789012:my-spiffy-api/stage/*"
         ]
     ]
@@ -52,12 +49,3 @@ s3FileSampleARN = "arn:aws:s3:::an-okay-bucket/sample.txt"
 
 sampleNotAnARN :: Text
 sampleNotAnARN = "//library.googleapis.com/shelves/shelf1/books/book2"
-
-over :: ((a -> Identity a) -> s -> Identity s) -> (a -> a) -> s -> s
-over l f = runIdentity . l (Identity . f)
-
-preview :: ((a -> Const (First a) a) -> s -> Const (First a) s) -> s -> Maybe a
-preview l = getFirst . getConst . l (Const . First . Just)
-
-review :: (Tagged a (Identity a) -> Tagged s (Identity s)) -> a -> s
-review l = runIdentity . unTagged . l . Tagged . Identity
