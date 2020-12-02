@@ -42,6 +42,7 @@ toFunction t = case T.splitOn ":" t of
   ("function" : name : qual) ->
     Just (Function name) <*> case qual of
       [q] -> Just $ Just q
+      [] -> Just Nothing
       _ -> Nothing
   _ -> Nothing
 

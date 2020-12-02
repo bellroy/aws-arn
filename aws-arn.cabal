@@ -50,6 +50,9 @@ test-suite spec
   import: opts
   type: exitcode-stdio-1.0
   main-is: Main.hs
+  other-modules:
+    Network.AWS.ARN.Lambda.Test
+    Network.AWS.ARN.Test
   hs-source-dirs: test
   ghc-options: -threaded
   build-depends:
@@ -57,6 +60,7 @@ test-suite spec
    , aws-arn
    , lens
    , tasty >= 1.2.3 && < 1.3
+   , tasty-discover >= 4.2.2 && < 4.3
    , tasty-hunit >= 0.10.0.2 && < 0.11
    , text
 
