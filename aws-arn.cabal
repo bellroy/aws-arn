@@ -63,6 +63,7 @@ test-suite spec
    , tasty ^>= 1.4.0.2
    , tasty-discover ^>= 4.2.2
    , tasty-hunit ^>= 0.10.0.3
+  build-tool-depends: tasty-discover:tasty-discover
 
 -- source-repository head
 --   type:     git
