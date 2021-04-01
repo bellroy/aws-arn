@@ -1,31 +1,33 @@
-{-# LANGUAGE DeriveAnyClass    #-}
-{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell   #-}
+{-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_HADDOCK show-extensions #-}
 
 -- |
 --
 -- Module      : Network.AWS.ARN.Lambda
--- Copyright   : TODO
--- License     : BSD3
--- Maintainer  : TODO
+-- Copyright   : (C) 2020-2021 Bellroy Pty Ltd
+-- License     : BSD-3-Clause
+-- Maintainer  : Jack Kelly <jack.kelly@bellroy.com>
 -- Stability   : experimental
 module Network.AWS.ARN.Lambda
   ( -- * Functions
-    Function(..),
+    Function (..),
     toFunction,
     fromFunction,
+
     -- ** Function Optics
     _Function,
     fName,
-    fQualifier
-  ) where
+    fQualifier,
+  )
+where
 
 import Control.Lens
+import Data.Hashable (Hashable)
 import Data.Maybe (maybeToList)
 import Data.Text (Text)
-import Data.Hashable (Hashable)
 import qualified Data.Text as T
 import GHC.Generics (Generic)
 

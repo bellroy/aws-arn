@@ -19,6 +19,7 @@ in
 env.overrideAttrs (oldAttrs: {
   buildInputs = oldAttrs.buildInputs ++ [ nixpkgs.nixpkgs-fmt niv ] ++ (with haskellPackages; [
     cabal-fmt
+    doctest
     haskell-ci
     hlint
   ]);

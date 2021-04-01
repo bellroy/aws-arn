@@ -1,15 +1,16 @@
 cabal-version:      2.2
 name:               aws-arn
 version:            0.1.0.0
-synopsis:           Optics for manipulating Amazon Resource Names (ARNs)
+synopsis:
+  Types and optics for manipulating Amazon Resource Names (ARNs)
 
 -- description:         See @README.md@
--- bug-reports:
--- license:
--- license-file:        LICENSE
--- author:              TODO
--- maintainer:          TODO
--- copyright:
+bug-reports:        http://github.com/tricycle/aws-arn/issues
+license:            BSD-3-Clause
+license-file:       LICENSE
+author:             Jack Kelly <jack.kelly@bellroy.com>
+maintainer:         Jack Kelly <jack.kelly@bellroy.com>
+copyright:          Copyright (C) 2020-2021 Bellroy Pty Ltd
 category:           AWS, Cloud
 build-type:         Simple
 extra-source-files: CHANGELOG.md

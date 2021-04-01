@@ -1,17 +1,17 @@
-{-# LANGUAGE DeriveAnyClass         #-}
-{-# LANGUAGE DeriveGeneric          #-}
-{-# LANGUAGE DeriveTraversable      #-}
-{-# LANGUAGE OverloadedStrings      #-}
-{-# LANGUAGE RankNTypes             #-}
-{-# LANGUAGE TemplateHaskell        #-}
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DeriveTraversable #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_HADDOCK show-extensions #-}
 
 -- |
 --
 -- Module      : Network.AWS.ARN
--- Copyright   : TODO
--- License     : BSD3
--- Maintainer  : TODO
+-- Copyright   : (C) 2020-2021 Bellroy Pty Ltd
+-- License     : BSD-3-Clause
+-- Maintainer  : Jack Kelly <jack.kelly@bellroy.com>
 -- Stability   : experimental
 --
 -- Provides a type representing [Amazon Resource Names
@@ -93,6 +93,10 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import GHC.Generics (Generic)
 
+-- $setup
+-- >>> :set -XOverloadedStrings
+-- >>> import Control.Lens
+
 data ARN r = ARN
   { _arnPartition :: Text,
     _arnService :: Text,
@@ -144,7 +148,7 @@ colons = iso (T.splitOn ":") (T.intercalate ":")
 -- | Split a 'Text' into slash-separated parts.
 --
 -- >>> "foo/bar/baz" ^. slashes
--- ["foo", "bar", "baz"]
+-- ["foo","bar","baz"]
 slashes :: Iso' Text [Text]
 slashes = iso (T.splitOn "/") (T.intercalate "/")
 {-# INLINE slashes #-}
