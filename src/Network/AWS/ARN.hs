@@ -11,7 +11,7 @@
 -- Module      : Network.AWS.ARN
 -- Copyright   : (C) 2020-2021 Bellroy Pty Ltd
 -- License     : BSD-3-Clause
--- Maintainer  : Jack Kelly <jack.kelly@bellroy.com>
+-- Maintainer  : Bellroy Tech Team <haskell@bellroy.com>
 -- Stability   : experimental
 --
 -- Provides a type representing [Amazon Resource Names
@@ -19,37 +19,7 @@
 -- and parsing/unparsing functions for them. The provided optics make it
 -- very convenient to rewrite parts of ARNs.
 --
--- == Utility Optics
---
--- The resource identifier part of an ARN often contains colon- or
--- slash-separated parts which precisely identify a resource. In such
--- situations, the 'colons' and 'slashes' @Iso@s provided here are
--- helpful.
---
--- == Service-Specific ARNs
---
--- Modules like "Network.AWS.ARN.Lambda" provide types to parse the
--- resource part of an ARN into something more specific:
---
--- @
--- -- Returns: Just "the-coolest-function-ever"
--- let
---   functionARN = "arn:aws:lambda:us-east-1:123456789012:function:the-coolest-function-ever:Alias"
--- in
---   functionARN ^? _ARN . arnResource . Lambda._Function . Lambda.fName
--- @
---
--- 'ARN' has a 'Traversable' instance, so it's also possible to
--- assemble prisms for these more specific ARN types. Use
--- 'Control.Lens.Prism.below':
---
--- @
--- '_ARN' . 'Control.Lens.Prism.below' Lambda._Function :: 'Prism'' 'Text' ('ARN' Lambda.Function)
--- @
---
--- PRs to add parsers for more resource types are **especially** welcome.
---
--- == Examples
+-- == Example
 --
 -- [API Gateway Lambda
 -- Authorizers](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html)
@@ -66,7 +36,7 @@
 -- let
 --   authorizerSampleARN = "arn:aws:execute-api:us-east-1:123456789012:my-spiffy-api\/stage\/GET\/some\/deep\/path"
 -- in
---   over ('_ARN' . 'resource' . 'slashes') (\parts -> take 2 parts ++ ["*"]) authorizerSampleARN
+--   over ('_ARN' . 'arnResource' . 'slashes') (\parts -> take 2 parts ++ ["*"]) authorizerSampleARN
 -- @
 module Network.AWS.ARN
   ( ARN (..),
@@ -97,6 +67,35 @@ import GHC.Generics (Generic)
 -- >>> :set -XOverloadedStrings
 -- >>> import Control.Lens
 
+-- | A parsed ARN. Either use the '_ARN' 'Prism'', or the 'toARN' and
+-- 'fromARN' functions to convert @'Text' \<-\> ARN@.  The
+-- '_arnResource' part of an ARN will often contain colon- or
+-- slash-separated parts which precisely identify some resource. If
+-- there is no service-specific module (see below), the 'colons' and
+-- 'slashes' @Control.Lens.Iso'@s in this module can pick apart the
+-- `_arnResource` field.
+--
+-- == Service-Specific Modules
+--
+-- Modules like "Network.AWS.ARN.Lambda" provide types to parse the
+-- resource part of an ARN into something more specific:
+--
+-- @
+-- -- Remark: Lambda._Function :: 'Prism'' 'Text' Lambda.Function
+-- -- Returns: Just "the-coolest-function-ever"
+-- let
+--   functionARN = "arn:aws:lambda:us-east-1:123456789012:function:the-coolest-function-ever:Alias"
+-- in
+--   functionARN ^? _ARN . arnResource . Lambda._Function . Lambda.fName
+-- @
+--
+-- You can also use 'ARN'\'s 'Traversable' instance and
+-- 'Control.Lens.Prism.below' to create 'Prism''s that indicate their
+-- resource type in 'ARN'\'s type variable:
+--
+-- @
+-- '_ARN' . 'Control.Lens.Prism.below' Lambda._Function :: 'Prism'' 'Text' ('ARN' Lambda.Function)
+-- @
 data ARN r = ARN
   { _arnPartition :: Text,
     _arnService :: Text,

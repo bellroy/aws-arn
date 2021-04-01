@@ -9,7 +9,7 @@
 -- Module      : Network.AWS.ARN.Lambda
 -- Copyright   : (C) 2020-2021 Bellroy Pty Ltd
 -- License     : BSD-3-Clause
--- Maintainer  : Jack Kelly <jack.kelly@bellroy.com>
+-- Maintainer  : Bellroy Tech Team <haskell@bellroy.com>
 -- Stability   : experimental
 module Network.AWS.ARN.Lambda
   ( -- * Functions

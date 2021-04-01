@@ -4,18 +4,32 @@ version:            0.1.0.0
 synopsis:
   Types and optics for manipulating Amazon Resource Names (ARNs)
 
--- description:         See @README.md@
+description:
+  This library provides a type representing [Amazon Resource Names
+  (ARNs)](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html),
+  and parsing/unparsing functions for them. The provided optics make
+  it very convenient to rewrite parts of ARNs.
+  .
+  Start reading at the "Network.AWS.ARN" module, which defines the
+  core data type and includes some examples of its use.
+  .
+  The library aims to provide additional parsers for destructuring the
+  "resource" part of an ARN, but many are missing right now. PRs to
+  add this support for more AWS resource types are **especially**
+  welcome.
+  
 bug-reports:        http://github.com/tricycle/aws-arn/issues
 license:            BSD-3-Clause
 license-file:       LICENSE
-author:             Jack Kelly <jack.kelly@bellroy.com>
-maintainer:         Jack Kelly <jack.kelly@bellroy.com>
+author:             Bellroy Tech Team <haskell@bellroy.com>
+maintainer:         Bellroy Tech Team <haskell@bellroy.com>
 copyright:          Copyright (C) 2020-2021 Bellroy Pty Ltd
 category:           AWS, Cloud
 build-type:         Simple
-extra-source-files: CHANGELOG.md
+extra-source-files:
+  CHANGELOG.md
+  README.md
 
---, README.md
 tested-with:        GHC ==8.6.5 || ==8.8.4 || ==8.10.4
 
 common opts
@@ -25,7 +39,7 @@ common opts
     -Wincomplete-uni-patterns -Werror=incomplete-patterns
     -Wredundant-constraints -Wpartial-fields -Wtabs
     -Wmissing-local-signatures -fhelpful-errors
-    -fprint-expanded-synonyms -fwarn-unused-do-bind -O2
+    -fprint-expanded-synonyms -fwarn-unused-do-bind
 
 common deps
   build-depends:
@@ -60,6 +74,6 @@ test-suite spec
 
   build-tool-depends: tasty-discover:tasty-discover -any
 
--- source-repository head
---   type:     git
---   location:
+source-repository head
+  type:     git
+  location: https://github.com/tricycle/aws-arn.git
