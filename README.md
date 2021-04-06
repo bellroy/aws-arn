@@ -1,4 +1,4 @@
-![CI Status](https://github.com/tricycle/aws-arn/actions/workflows/haskell-ci.yml/badge.svg)
+![CI Status](https://github.com/bellroy/aws-arn/actions/workflows/haskell-ci.yml/badge.svg)
 
 ## Formatters
 

@@ -17,8 +17,8 @@ description:
   "resource" part of an ARN, but many are missing right now. PRs to
   add this support for more AWS resource types are **especially**
   welcome.
-  
-bug-reports:        http://github.com/tricycle/aws-arn/issues
+
+bug-reports:        http://github.com/bellroy/aws-arn/issues
 license:            BSD-3-Clause
 license-file:       LICENSE
 author:             Bellroy Tech Team <haskell@bellroy.com>
@@ -76,4 +76,4 @@ test-suite spec
 
 source-repository head
   type:     git
-  location: https://github.com/tricycle/aws-arn.git
+  location: https://github.com/bellroy/aws-arn.git
