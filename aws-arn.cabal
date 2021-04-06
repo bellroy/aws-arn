@@ -11,7 +11,12 @@ description:
   it very convenient to rewrite parts of ARNs.
   .
   Start reading at the "Network.AWS.ARN" module, which defines the
-  core data type and includes some examples of its use.
+  core data type and includes some examples.
+  .
+  The @ARN@ type is not designed to be a 100% correct-by-construction
+  representation of only valid ARNs; it is designed to be a
+  lightweight way to destructure and reassemble ARNs to be used in
+  place of string munging.
   .
   The library aims to provide additional parsers for destructuring the
   "resource" part of an ARN, but many are missing right now. PRs to
