@@ -58,21 +58,25 @@ module Network.AWS.ARN
 where
 
 import Control.Lens (Iso', Prism', iso, makeLenses, prism')
+import Data.Eq.Deriving (deriveEq1)
 import Data.Hashable (Hashable)
+import Data.Hashable.Lifted (Hashable1)
+import Data.Ord.Deriving (deriveOrd1)
 import Data.Text (Text)
 import qualified Data.Text as T
-import GHC.Generics (Generic)
+import GHC.Generics (Generic, Generic1)
+import Text.Show.Deriving (deriveShow1)
 
 -- $setup
 -- >>> :set -XOverloadedStrings
 -- >>> import Control.Lens
 
 -- | A parsed ARN. Either use the '_ARN' 'Prism'', or the 'toARN' and
--- 'fromARN' functions to convert @'Text' \<-\> ARN@.  The
+-- 'fromARN' functions to convert @'Text' \<-\> 'ARN'@.  The
 -- '_arnResource' part of an ARN will often contain colon- or
 -- slash-separated parts which precisely identify some resource. If
 -- there is no service-specific module (see below), the 'colons' and
--- 'slashes' @Control.Lens.Iso'@s in this module can pick apart the
+-- 'slashes' @'Control.Lens.Iso''@s in this module can pick apart the
 -- `_arnResource` field.
 --
 -- == Service-Specific Modules
@@ -103,9 +107,23 @@ data ARN r = ARN
     _arnAccount :: Text,
     _arnResource :: r
   }
-  deriving (Eq, Ord, Show, Generic, Hashable, Functor, Foldable, Traversable)
+  deriving
+    ( Eq,
+      Ord,
+      Show,
+      Generic,
+      Generic1,
+      Hashable,
+      Hashable1,
+      Functor,
+      Foldable,
+      Traversable
+    )
 
 $(makeLenses ''ARN)
+$(deriveEq1 ''ARN)
+$(deriveOrd1 ''ARN)
+$(deriveShow1 ''ARN)
 
 toARN :: Text -> Maybe (ARN Text)
 toARN t = case T.splitOn ":" t of

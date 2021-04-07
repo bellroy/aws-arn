@@ -48,9 +48,10 @@ common opts
 
 common deps
   build-depends:
-    , base  >=4.12   && <4.15
-    , lens  >=4.18.1 && <5.1
-    , text  ^>=1.2.3
+    , base             >=4.12   && <4.15
+    , deriving-compat  ^>=0.5.10
+    , lens             >=4.18.1 && <5.1
+    , text             ^>=1.2.3
 
 library
   import:          opts, deps
