@@ -20,7 +20,7 @@ description:
   .
   The library aims to provide additional parsers for destructuring the
   "resource" part of an ARN, but many are missing right now. PRs to
-  add this support for more AWS resource types are **especially**
+  add this support for more AWS resource types are __especially__
   welcome.
 
 bug-reports:        http://github.com/bellroy/aws-arn/issues
