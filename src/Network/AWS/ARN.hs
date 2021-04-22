@@ -36,7 +36,7 @@
 -- let
 --   authorizerSampleARN = "arn:aws:execute-api:us-east-1:123456789012:my-spiffy-api\/stage\/GET\/some\/deep\/path"
 -- in
---   over ('_ARN' . 'arnResource' . 'slashes') (\parts -> take 2 parts ++ ["*"]) authorizerSampleARN
+--   over ('_ARN' . 'arnResource' . 'slashes') (\\parts -> take 2 parts ++ ["*"]) authorizerSampleARN
 -- @
 module Network.AWS.ARN
   ( ARN (..),
