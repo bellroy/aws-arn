@@ -156,6 +156,19 @@ _ARN = prism' fromARN toARN
 
 -- | Split a 'Text' into colon-separated parts.
 --
+-- This is not truly a lawful 'Iso'', but it is useful. The 'Iso''
+-- laws are violated for lists whose members contain @':'@:
+--
+-- >>> [":"] ^. from colons . colons
+-- ["",""]
+--
+-- The laws are also violated on empty lists:
+--
+-- >>> [] ^. from colons . colons
+-- [""]
+--
+-- However, it is still a useful tool:
+--
 -- >>> "foo:bar:baz" & colons . ix 1 .~ "quux"
 -- "foo:quux:baz"
 colons :: Iso' Text [Text]
@@ -164,8 +177,12 @@ colons = iso (T.splitOn ":") (T.intercalate ":")
 
 -- | Split a 'Text' into slash-separated parts.
 --
+-- This is not truly a lawful 'Iso'', but it is useful:
+--
 -- >>> "foo/bar/baz" ^. slashes
 -- ["foo","bar","baz"]
+--
+-- Similar caveats to 'colons' apply here.
 slashes :: Iso' Text [Text]
 slashes = iso (T.splitOn "/") (T.intercalate "/")
 {-# INLINE slashes #-}
