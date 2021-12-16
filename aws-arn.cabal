@@ -1,6 +1,6 @@
 cabal-version:      2.2
 name:               aws-arn
-version:            0.1.0.0
+version:            0.1.0.1
 synopsis:
   Types and optics for manipulating Amazon Resource Names (ARNs)
 
@@ -35,7 +35,7 @@ extra-source-files:
   CHANGELOG.md
   README.md
 
-tested-with:        GHC ==8.6.5 || ==8.8.4 || ==8.10.4
+tested-with:        GHC ==8.6.5 || ==8.8.4 || ==8.10.7 || ==9.0.1
 
 common opts
   default-language: Haskell2010
@@ -48,9 +48,9 @@ common opts
 
 common deps
   build-depends:
-    , base             >=4.12   && <4.16
+    , base             >=4.12   && <4.17
     , deriving-compat  >=0.5.10 && <0.7
-    , lens             >=4.18.1 && <5.1
+    , lens             >=4.18.1 && <5.2
     , text             ^>=1.2.3
 
 library
@@ -59,7 +59,7 @@ library
     Network.AWS.ARN
     Network.AWS.ARN.Lambda
 
-  build-depends:   hashable ^>=1.3.0.0
+  build-depends:   hashable >=1.3.0.0 && <1.5
   hs-source-dirs:  src
 
 test-suite spec
