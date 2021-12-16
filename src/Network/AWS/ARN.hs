@@ -3,6 +3,7 @@
 {-# LANGUAGE DeriveTraversable #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_HADDOCK show-extensions #-}
 
@@ -114,7 +115,6 @@ data ARN r = ARN
       Generic,
       Generic1,
       Hashable,
-      Hashable1,
       Functor,
       Foldable,
       Traversable
@@ -124,6 +124,8 @@ $(makeLenses ''ARN)
 $(deriveEq1 ''ARN)
 $(deriveOrd1 ''ARN)
 $(deriveShow1 ''ARN)
+
+deriving instance Hashable1 ARN
 
 toARN :: Text -> Maybe (ARN Text)
 toARN t = case T.splitOn ":" t of
