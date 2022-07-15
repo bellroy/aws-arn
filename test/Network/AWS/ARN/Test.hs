@@ -3,6 +3,8 @@
 module Network.AWS.ARN.Test where
 
 import Control.Lens (over, preview, review)
+import Data.List.NonEmpty (NonEmpty (..))
+import qualified Data.List.NonEmpty as NonEmpty
 import Data.Text (Text)
 import Network.AWS.ARN
 import Test.Tasty
@@ -30,7 +32,10 @@ test_all =
             (review _ARN <$> preview _ARN authorizerSampleARN)
               @?= Just authorizerSampleARN,
           testCase "edit path of Lambda Authorizer ARN" $
-            over (_ARN . arnResource . slashes) (\parts -> take 2 parts ++ ["*"]) authorizerSampleARN
+            over
+              (_ARN . arnResource . slashes)
+              (\parts -> prependList (NonEmpty.take 2 parts) ("*" :| []))
+              authorizerSampleARN
               @?= "arn:aws:execute-api:us-east-1:123456789012:my-spiffy-api/stage/*"
         ]
     ]
@@ -46,3 +51,10 @@ s3FileSampleARN = "arn:aws:s3:::an-okay-bucket/sample.txt"
 
 sampleNotAnARN :: Text
 sampleNotAnARN = "//library.googleapis.com/shelves/shelf1/books/book2"
+
+-- In Data.List.NonEmpty as of base >=4.16, but not worth breaking
+-- compatibility just for this. Remove once the three latest GHC major
+-- releases are all base >=4.16.
+prependList :: [a] -> NonEmpty a -> NonEmpty a
+prependList [] ys = ys
+prependList (x : xs) (y :| ys) = x :| xs ++ y : ys

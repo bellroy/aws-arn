@@ -58,10 +58,12 @@ module Network.AWS.ARN
   )
 where
 
-import Control.Lens (Iso', Prism', iso, makeLenses, prism')
+import Control.Lens (Lens', Prism', makeLenses, prism')
 import Data.Eq.Deriving (deriveEq1)
 import Data.Hashable (Hashable)
 import Data.Hashable.Lifted (Hashable1)
+import Data.List.NonEmpty (NonEmpty)
+import qualified Data.List.NonEmpty as NonEmpty
 import Data.Ord.Deriving (deriveOrd1)
 import Data.Text (Text)
 import qualified Data.Text as T
@@ -71,6 +73,7 @@ import Text.Show.Deriving (deriveShow1)
 -- $setup
 -- >>> :set -XOverloadedStrings
 -- >>> import Control.Lens
+-- >>> import Data.List.NonEmpty (NonEmpty(..))
 
 -- | A parsed ARN. Either use the '_ARN' 'Prism'', or the 'toARN' and
 -- 'fromARN' functions to convert @'Text' \<-\> 'ARN'@.  The
@@ -158,33 +161,29 @@ _ARN = prism' fromARN toARN
 
 -- | Split a 'Text' into colon-separated parts.
 --
--- This is not truly a lawful 'Iso'', but it is useful. The 'Iso''
--- laws are violated for lists whose members contain @':'@:
---
--- >>> [":"] ^. from colons . colons
--- ["",""]
---
--- The laws are also violated on empty lists:
---
--- >>> [] ^. from colons . colons
--- [""]
---
--- However, it is still a useful tool:
+-- This is useful for editing the resource part of an ARN:
 --
 -- >>> "foo:bar:baz" & colons . ix 1 .~ "quux"
 -- "foo:quux:baz"
-colons :: Iso' Text [Text]
-colons = iso (T.splitOn ":") (T.intercalate ":")
+--
+-- Writing back through the lens ignores the string it is applied to:
+--
+-- >>> "Hello, world!" & colons .~ "dude" :| ["sweet"]
+-- "dude:sweet"
+colons :: Lens' Text (NonEmpty Text)
+colons f t =
+  T.intercalate ":" . NonEmpty.toList
+    <$> f (NonEmpty.fromList (T.splitOn ":" t))
 {-# INLINE colons #-}
 
 -- | Split a 'Text' into slash-separated parts.
 --
--- This is not truly a lawful 'Iso'', but it is useful:
---
 -- >>> "foo/bar/baz" ^. slashes
--- ["foo","bar","baz"]
+-- "foo" :| ["bar","baz"]
 --
--- Similar caveats to 'colons' apply here.
-slashes :: Iso' Text [Text]
-slashes = iso (T.splitOn "/") (T.intercalate "/")
+-- Similar caveats to 'colons' apply.
+slashes :: Lens' Text (NonEmpty Text)
+slashes f t =
+  T.intercalate "/" . NonEmpty.toList
+    <$> f (NonEmpty.fromList (T.splitOn "/" t))
 {-# INLINE slashes #-}
