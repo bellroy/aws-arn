@@ -1,4 +1,5 @@
-{-# LANGUAGE OverloadedStrings, NamedFieldPuns #-}
+{-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Network.AWS.ARN.Test where
 
@@ -53,7 +54,7 @@ sampleNotAnARN :: Text
 sampleNotAnARN = "//library.googleapis.com/shelves/shelf1/books/book2"
 
 arnResource :: Lens' (ARN a) a
-arnResource l a@(ARN{resource})= (\r -> a { resource = r}) <$> l resource
+arnResource l a@(ARN {resource}) = (\r -> a {resource = r}) <$> l resource
 
 -- In Data.List.NonEmpty as of base >=4.16, but not worth breaking
 -- compatibility just for this. Remove once the three latest GHC major
