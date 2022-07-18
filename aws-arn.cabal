@@ -28,7 +28,7 @@ license:            BSD-3-Clause
 license-file:       LICENSE
 author:             Bellroy Tech Team <haskell@bellroy.com>
 maintainer:         Bellroy Tech Team <haskell@bellroy.com>
-copyright:          Copyright (C) 2020-2021 Bellroy Pty Ltd
+copyright:          Copyright (C) 2020-2022 Bellroy Pty Ltd
 category:           AWS, Cloud
 build-type:         Simple
 extra-source-files:
@@ -52,13 +52,16 @@ common deps
   build-depends:
     , base             >=4.12   && <4.17
     , deriving-compat  >=0.5.10 && <0.7
-    , lens             >=4.18.1 && <5.2
+    , lens
+    , profunctors      >=5.0    && <5.7
+    , tagged           ^>=0.8
     , text             ^>=1.2.3 || ^>=2.0
 
 library
   import:          opts, deps
   exposed-modules:
     Network.AWS.ARN
+    Network.AWS.ARN.Internal.Lens
     Network.AWS.ARN.Lambda
 
   build-depends:   hashable >=1.3.0.0 && <1.5

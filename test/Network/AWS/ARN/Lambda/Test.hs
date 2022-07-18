@@ -2,7 +2,7 @@
 
 module Network.AWS.ARN.Lambda.Test where
 
-import Control.Lens (set, (^?))
+import Network.AWS.ARN.Internal.Lens (set, (^?))
 import Network.AWS.ARN.Lambda
 import Test.Tasty
 import Test.Tasty.HUnit

@@ -7,7 +7,7 @@
 -- |
 --
 -- Module      : Network.AWS.ARN.Lambda
--- Copyright   : (C) 2020-2021 Bellroy Pty Ltd
+-- Copyright   : (C) 2020-2022 Bellroy Pty Ltd
 -- License     : BSD-3-Clause
 -- Maintainer  : Bellroy Tech Team <haskell@bellroy.com>
 -- Stability   : experimental
@@ -24,12 +24,13 @@ module Network.AWS.ARN.Lambda
   )
 where
 
-import Control.Lens
+import Control.Lens (makeLenses)
 import Data.Hashable (Hashable)
 import Data.Maybe (maybeToList)
 import Data.Text (Text)
 import qualified Data.Text as T
 import GHC.Generics (Generic)
+import Network.AWS.ARN.Internal.Lens (Prism', prism')
 
 -- $setup
 -- >>> :set -XOverloadedStrings

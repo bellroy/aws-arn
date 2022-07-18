@@ -10,7 +10,7 @@
 -- |
 --
 -- Module      : Network.AWS.ARN
--- Copyright   : (C) 2020-2021 Bellroy Pty Ltd
+-- Copyright   : (C) 2020-2022 Bellroy Pty Ltd
 -- License     : BSD-3-Clause
 -- Maintainer  : Bellroy Tech Team <haskell@bellroy.com>
 -- Stability   : experimental
@@ -58,7 +58,7 @@ module Network.AWS.ARN
   )
 where
 
-import Control.Lens (Lens', Prism', makeLenses, prism')
+import Control.Lens (makeLenses)
 import Data.Eq.Deriving (deriveEq1)
 import Data.Hashable (Hashable)
 import Data.Hashable.Lifted (Hashable1)
@@ -68,6 +68,7 @@ import Data.Ord.Deriving (deriveOrd1)
 import Data.Text (Text)
 import qualified Data.Text as T
 import GHC.Generics (Generic, Generic1)
+import Network.AWS.ARN.Internal.Lens (Lens', Prism', prism')
 import Text.Show.Deriving (deriveShow1)
 
 -- $setup
@@ -171,9 +172,7 @@ _ARN = prism' fromARN toARN
 -- >>> "Hello, world!" & colons .~ "dude" :| ["sweet"]
 -- "dude:sweet"
 colons :: Lens' Text (NonEmpty Text)
-colons f t =
-  T.intercalate ":" . NonEmpty.toList
-    <$> f (NonEmpty.fromList (T.splitOn ":" t))
+colons = splitOn ":"
 {-# INLINE colons #-}
 
 -- | Split a 'Text' into slash-separated parts.
@@ -183,7 +182,11 @@ colons f t =
 --
 -- Similar caveats to 'colons' apply.
 slashes :: Lens' Text (NonEmpty Text)
-slashes f t =
-  T.intercalate "/" . NonEmpty.toList
-    <$> f (NonEmpty.fromList (T.splitOn "/" t))
+slashes = splitOn "/"
 {-# INLINE slashes #-}
+
+splitOn :: Text -> Lens' Text (NonEmpty Text)
+splitOn delim f t =
+  T.intercalate delim . NonEmpty.toList
+    <$> f (NonEmpty.fromList (T.splitOn delim t))
+{-# INLINE splitOn #-}

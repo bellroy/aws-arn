@@ -2,11 +2,11 @@
 
 module Network.AWS.ARN.Test where
 
-import Control.Lens (over, preview, review)
 import Data.List.NonEmpty (NonEmpty (..))
 import qualified Data.List.NonEmpty as NonEmpty
 import Data.Text (Text)
 import Network.AWS.ARN
+import Network.AWS.ARN.Internal.Lens (over, preview, review)
 import Test.Tasty
 import Test.Tasty.HUnit
 
