@@ -1,7 +1,16 @@
 # Revision history for aws-arn
 
-## 0.2.0.0 -- 2022-??-??
+## 0.2.0.0 -- 2022-07-19
 
+* Remove the leading underscore and prefix on record names. This makes
+  for a nicer interface when using the
+  [@generic-lens@](https://hackage.haskell.org/package/generic-lens)
+  and
+  [@generic-optics@](https://hackage.haskell.org/package/generic-optics)
+  libraries, which are now the preferred way to lens into individual
+  fields.
+* Remove dependency on `lens`; depend instead on `profunctors` (to
+  provide `Prism'`s)
 * `Network.AWS.ARN.colons`: Provide a `Lens'` instead of an unlawful `Iso'`
 * `Network.AWS.ARN.slashes`: Provide a `Lens'` instead of an unlawful `Iso'`
 
