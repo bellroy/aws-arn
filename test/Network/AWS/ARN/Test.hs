@@ -18,14 +18,14 @@ test_all =
     [ testGroup
         "basic tests"
         [ testCase "inspect function name and alias of Lambda ARN" $
-            (resource <$> toARN aliasedLambdaSampleARN)
+            (resource <$> parseARN aliasedLambdaSampleARN)
               @?= Just "function:the-coolest-function-ever:Alias",
           testCase "parses empty region OK" $
-            (region <$> toARN s3FileSampleARN) @?= Just "",
+            (region <$> parseARN s3FileSampleARN) @?= Just "",
           testCase "parses empty account OK" $
-            (account <$> toARN s3FileSampleARN) @?= Just "",
+            (account <$> parseARN s3FileSampleARN) @?= Just "",
           testCase "rejects non-ARNs" $
-            toARN sampleNotAnARN @?= Nothing
+            parseARN sampleNotAnARN @?= Nothing
         ],
       testGroup
         "optic tests"

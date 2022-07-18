@@ -13,10 +13,10 @@
 module Network.AWS.ARN.Lambda
   ( -- * Functions
     Function (..),
-    toFunction,
-    fromFunction,
+    parseFunction,
+    renderFunction,
 
-    -- ** Function Optics
+    -- ** Prisms
     _Function,
   )
 where
@@ -44,8 +44,8 @@ data Function = Function
   }
   deriving (Eq, Ord, Hashable, Show, Generic)
 
-toFunction :: Text -> Maybe Function
-toFunction t = case T.splitOn ":" t of
+parseFunction :: Text -> Maybe Function
+parseFunction t = case T.splitOn ":" t of
   ("function" : nam : qual) ->
     Just (Function nam) <*> case qual of
       [q] -> Just $ Just q
@@ -53,10 +53,10 @@ toFunction t = case T.splitOn ":" t of
       _ -> Nothing
   _ -> Nothing
 
-fromFunction :: Function -> Text
-fromFunction f =
+renderFunction :: Function -> Text
+renderFunction f =
   T.intercalate ":" $
     ["function", name f] ++ maybeToList (qualifier f)
 
 _Function :: Prism' Text Function
-_Function = prism' fromFunction toFunction
+_Function = prism' renderFunction parseFunction

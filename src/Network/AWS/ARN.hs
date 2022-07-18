@@ -45,10 +45,10 @@
 -- @
 module Network.AWS.ARN
   ( ARN (..),
-    toARN,
-    fromARN,
+    parseARN,
+    renderARN,
 
-    -- * ARN Optics
+    -- * ARN Prism
     _ARN,
 
     -- * Utility Optics
@@ -69,8 +69,8 @@ import GHC.Generics (Generic, Generic1)
 import Network.AWS.ARN.Internal.Lens (Lens', Prism', prism')
 import Text.Show.Deriving (deriveShow1)
 
--- | A parsed ARN. Either use the '_ARN' 'Prism'', or the 'toARN' and
--- 'fromARN' functions to convert @'Text' \<-\> 'ARN'@.  The
+-- | A parsed ARN. Either use the '_ARN' 'Prism'', or the 'parseARN' and
+-- 'renderARN' functions to convert @'Text' \<-\> 'ARN'@.  The
 -- 'resource' part of an ARN will often contain colon- or
 -- slash-separated parts which precisely identify some resource. If
 -- there is no service-specific module (see below), the 'colons' and
@@ -129,8 +129,8 @@ $(deriveShow1 ''ARN)
 
 deriving instance Hashable1 ARN
 
-toARN :: Text -> Maybe (ARN Text)
-toARN t = case T.splitOn ":" t of
+parseARN :: Text -> Maybe (ARN Text)
+parseARN t = case T.splitOn ":" t of
   ("arn" : part : srv : reg : acc : res) ->
     Just $
       ARN
@@ -142,8 +142,8 @@ toARN t = case T.splitOn ":" t of
         }
   _ -> Nothing
 
-fromARN :: ARN Text -> Text
-fromARN arn =
+renderARN :: ARN Text -> Text
+renderARN arn =
   T.intercalate
     ":"
     [ "arn",
@@ -155,7 +155,7 @@ fromARN arn =
     ]
 
 _ARN :: Prism' Text (ARN Text)
-_ARN = prism' fromARN toARN
+_ARN = prism' renderARN parseARN
 {-# INLINE _ARN #-}
 
 -- | Split a 'Text' into colon-separated parts.
