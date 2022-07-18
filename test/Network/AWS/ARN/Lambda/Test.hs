@@ -1,8 +1,10 @@
+{-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Network.AWS.ARN.Lambda.Test where
 
-import Network.AWS.ARN.Internal.Lens (set, (^?))
+import Data.Text (Text)
+import Network.AWS.ARN.Internal.Lens (Lens', set, (^?))
 import Network.AWS.ARN.Lambda
 import Test.Tasty
 import Test.Tasty.HUnit
@@ -31,3 +33,6 @@ test_all =
             ]
         ]
     ]
+
+fQualifier :: Lens' Function (Maybe Text)
+fQualifier l f@Function {qualifier} = (\q -> f {qualifier = q}) <$> l qualifier

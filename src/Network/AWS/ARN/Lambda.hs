@@ -1,7 +1,6 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_HADDOCK show-extensions #-}
 
 -- |
@@ -19,12 +18,9 @@ module Network.AWS.ARN.Lambda
 
     -- ** Function Optics
     _Function,
-    fName,
-    fQualifier,
   )
 where
 
-import Control.Lens (makeLenses)
 import Data.Hashable (Hashable)
 import Data.Maybe (maybeToList)
 import Data.Text (Text)
@@ -47,17 +43,15 @@ import Network.AWS.ARN.Internal.Lens (Prism', prism')
 -- >>> "function:helloworld:42" ^? _Function
 -- Just (Function {_fName = "helloworld", _fQualifier = Just "42"})
 data Function = Function
-  { _fName :: Text,
-    _fQualifier :: Maybe Text
+  { name :: Text,
+    qualifier :: Maybe Text
   }
   deriving (Eq, Ord, Hashable, Show, Generic)
 
-$(makeLenses ''Function)
-
 toFunction :: Text -> Maybe Function
 toFunction t = case T.splitOn ":" t of
-  ("function" : name : qual) ->
-    Just (Function name) <*> case qual of
+  ("function" : nam : qual) ->
+    Just (Function nam) <*> case qual of
       [q] -> Just $ Just q
       [] -> Just Nothing
       _ -> Nothing
@@ -66,7 +60,7 @@ toFunction t = case T.splitOn ":" t of
 fromFunction :: Function -> Text
 fromFunction f =
   T.intercalate ":" $
-    ["function", _fName f] ++ maybeToList (_fQualifier f)
+    ["function", name f] ++ maybeToList (qualifier f)
 
 _Function :: Prism' Text Function
 _Function = prism' fromFunction toFunction

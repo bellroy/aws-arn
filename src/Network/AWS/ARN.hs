@@ -46,11 +46,6 @@ module Network.AWS.ARN
 
     -- * ARN Optics
     _ARN,
-    arnPartition,
-    arnService,
-    arnRegion,
-    arnAccount,
-    arnResource,
 
     -- * Utility Optics
     colons,
@@ -58,7 +53,6 @@ module Network.AWS.ARN
   )
 where
 
-import Control.Lens (makeLenses)
 import Data.Eq.Deriving (deriveEq1)
 import Data.Hashable (Hashable)
 import Data.Hashable.Lifted (Hashable1)
@@ -106,11 +100,11 @@ import Text.Show.Deriving (deriveShow1)
 -- '_ARN' . 'Control.Lens.Prism.below' Lambda._Function :: 'Prism'' 'Text' ('ARN' Lambda.Function)
 -- @
 data ARN r = ARN
-  { _arnPartition :: Text,
-    _arnService :: Text,
-    _arnRegion :: Text,
-    _arnAccount :: Text,
-    _arnResource :: r
+  { partition :: Text,
+    service :: Text,
+    region :: Text,
+    account :: Text,
+    resource :: r
   }
   deriving
     ( Eq,
@@ -124,7 +118,6 @@ data ARN r = ARN
       Traversable
     )
 
-$(makeLenses ''ARN)
 $(deriveEq1 ''ARN)
 $(deriveOrd1 ''ARN)
 $(deriveShow1 ''ARN)
@@ -136,11 +129,11 @@ toARN t = case T.splitOn ":" t of
   ("arn" : part : srv : reg : acc : res) ->
     Just $
       ARN
-        { _arnPartition = part,
-          _arnService = srv,
-          _arnRegion = reg,
-          _arnAccount = acc,
-          _arnResource = T.intercalate ":" res
+        { partition = part,
+          service = srv,
+          region = reg,
+          account = acc,
+          resource = T.intercalate ":" res
         }
   _ -> Nothing
 
@@ -149,11 +142,11 @@ fromARN arn =
   T.intercalate
     ":"
     [ "arn",
-      _arnPartition arn,
-      _arnService arn,
-      _arnRegion arn,
-      _arnAccount arn,
-      _arnResource arn
+      partition arn,
+      service arn,
+      region arn,
+      account arn,
+      resource arn
     ]
 
 _ARN :: Prism' Text (ARN Text)

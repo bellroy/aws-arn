@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, NamedFieldPuns #-}
 
 module Network.AWS.ARN.Test where
 
@@ -6,7 +6,7 @@ import Data.List.NonEmpty (NonEmpty (..))
 import qualified Data.List.NonEmpty as NonEmpty
 import Data.Text (Text)
 import Network.AWS.ARN
-import Network.AWS.ARN.Internal.Lens (over, preview, review)
+import Network.AWS.ARN.Internal.Lens (Lens', over, preview, review)
 import Test.Tasty
 import Test.Tasty.HUnit
 
@@ -17,12 +17,12 @@ test_all =
     [ testGroup
         "basic tests"
         [ testCase "inspect function name and alias of Lambda ARN" $
-            (_arnResource <$> toARN aliasedLambdaSampleARN)
+            (resource <$> toARN aliasedLambdaSampleARN)
               @?= Just "function:the-coolest-function-ever:Alias",
           testCase "parses empty region OK" $
-            (_arnRegion <$> toARN s3FileSampleARN) @?= Just "",
+            (region <$> toARN s3FileSampleARN) @?= Just "",
           testCase "parses empty account OK" $
-            (_arnAccount <$> toARN s3FileSampleARN) @?= Just "",
+            (account <$> toARN s3FileSampleARN) @?= Just "",
           testCase "rejects non-ARNs" $
             toARN sampleNotAnARN @?= Nothing
         ],
@@ -51,6 +51,9 @@ s3FileSampleARN = "arn:aws:s3:::an-okay-bucket/sample.txt"
 
 sampleNotAnARN :: Text
 sampleNotAnARN = "//library.googleapis.com/shelves/shelf1/books/book2"
+
+arnResource :: Lens' (ARN a) a
+arnResource l a@(ARN{resource})= (\r -> a { resource = r}) <$> l resource
 
 -- In Data.List.NonEmpty as of base >=4.16, but not worth breaking
 -- compatibility just for this. Remove once the three latest GHC major
