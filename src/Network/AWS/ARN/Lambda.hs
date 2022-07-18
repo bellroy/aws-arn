@@ -28,20 +28,16 @@ import qualified Data.Text as T
 import GHC.Generics (Generic)
 import Network.AWS.ARN.Internal.Lens (Prism', prism')
 
--- $setup
--- >>> :set -XOverloadedStrings
--- >>> import Control.Lens
-
 -- | An AWS Lambda function name, and optional alias/version qualifier.
 --
 -- >>> "function:helloworld" ^? _Function
--- Just (Function {_fName = "helloworld", _fQualifier = Nothing})
+-- Just (Function {name = "helloworld", qualifier = Nothing})
 --
 -- >>> "function:helloworld:$LATEST" ^? _Function
--- Just (Function {_fName = "helloworld", _fQualifier = Just "$LATEST"})
+-- Just (Function {name = "helloworld", qualifier = Just "$LATEST"})
 --
 -- >>> "function:helloworld:42" ^? _Function
--- Just (Function {_fName = "helloworld", _fQualifier = Just "42"})
+-- Just (Function {name = "helloworld", qualifier = Just "42"})
 data Function = Function
   { name :: Text,
     qualifier :: Maybe Text

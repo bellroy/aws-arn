@@ -33,11 +33,15 @@
 -- every endpoint in the stage:
 --
 -- @
+-- {-# LANGUAGE OverloadedLabels #-}
+-- -- This provides the necessary instances from generic-lens
+-- import Data.Generics.Labels ()
+--
 -- -- Returns "arn:aws:execute-api:us-east-1:123456789012:my-spiffy-api\/stage\/*"
 -- let
 --   authorizerSampleARN = "arn:aws:execute-api:us-east-1:123456789012:my-spiffy-api\/stage\/GET\/some\/deep\/path"
 -- in
---   over ('_ARN' . 'arnResource' . 'slashes') (\\parts -> take 2 parts ++ ["*"]) authorizerSampleARN
+--   over ('_ARN' . #resource . 'slashes') (\\parts -> take 2 parts ++ ["*"]) authorizerSampleARN
 -- @
 module Network.AWS.ARN
   ( ARN (..),
@@ -65,18 +69,19 @@ import GHC.Generics (Generic, Generic1)
 import Network.AWS.ARN.Internal.Lens (Lens', Prism', prism')
 import Text.Show.Deriving (deriveShow1)
 
--- $setup
--- >>> :set -XOverloadedStrings
--- >>> import Control.Lens
--- >>> import Data.List.NonEmpty (NonEmpty(..))
-
 -- | A parsed ARN. Either use the '_ARN' 'Prism'', or the 'toARN' and
 -- 'fromARN' functions to convert @'Text' \<-\> 'ARN'@.  The
--- '_arnResource' part of an ARN will often contain colon- or
+-- 'resource' part of an ARN will often contain colon- or
 -- slash-separated parts which precisely identify some resource. If
 -- there is no service-specific module (see below), the 'colons' and
--- 'slashes' @'Control.Lens.Iso''@s in this module can pick apart the
--- `_arnResource` field.
+-- 'slashes' lenses in this module can pick apart the `resource`
+-- field.
+--
+-- If you want lenses into individual fields, use the
+-- [@generic-lens@](https://hackage.haskell.org/package/generic-lens)
+-- or
+-- [@generic-optics@](https://hackage.haskell.org/package/generic-optics)
+-- libraries.
 --
 -- == Service-Specific Modules
 --
@@ -84,12 +89,12 @@ import Text.Show.Deriving (deriveShow1)
 -- resource part of an ARN into something more specific:
 --
 -- @
--- -- Remark: Lambda._Function :: 'Prism'' 'Text' Lambda.Function
+-- -- Remark: Lambda._Function :: Prism' Text Lambda.Function
 -- -- Returns: Just "the-coolest-function-ever"
 -- let
 --   functionARN = "arn:aws:lambda:us-east-1:123456789012:function:the-coolest-function-ever:Alias"
 -- in
---   functionARN ^? _ARN . arnResource . Lambda._Function . Lambda.fName
+--   functionARN ^? _ARN . #resource . Lambda._Function . #name
 -- @
 --
 -- You can also use 'ARN'\'s 'Traversable' instance and
@@ -97,7 +102,7 @@ import Text.Show.Deriving (deriveShow1)
 -- resource type in 'ARN'\'s type variable:
 --
 -- @
--- '_ARN' . 'Control.Lens.Prism.below' Lambda._Function :: 'Prism'' 'Text' ('ARN' Lambda.Function)
+-- '_ARN' . 'Control.Lens.Prism.below' Lambda._Function :: Prism' Text ('ARN' Lambda.Function)
 -- @
 data ARN r = ARN
   { partition :: Text,
