@@ -4,8 +4,10 @@
 
 This library provides a type representing [Amazon Resource Names
 (ARNs)](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html),
-and parsing/unparsing functions for them. The provided optics make it
-very convenient to rewrite parts of ARNs.
+and parsing/unparsing functions for them. When combined with
+[`generic-lens`](https://hackage.haskell.org/package/generic-lens) or
+[`generic-optics`](https://hackage.haskell.org/package/generic-optics),
+the provided prisms make it very convenient to rewrite parts of ARNs.
 
 Start reading at the `Network.AWS.ARN` module, which defines the core
 data type and includes some examples.
@@ -30,56 +32,49 @@ add a new resource:
 
 2. Define a record `Foo` to represent the parsed resource part of an
    ARN, and derive (at least) `Eq`, `Ord`, `Hashable`, `Show` and
-   `Generic`. Also generate lenses for its fields:
+   `Generic`:
 
    ```haskell
    data Function = Function
-   { _fName :: Text,
-     _fQualifier :: Maybe Text
+   { name :: Text,
+     qualifier :: Maybe Text
    }
    deriving (Eq, Ord, Hashable, Show, Generic)
-
-   $(makeLenses ''Function)
    ```
 
-3. Define `toFoo` and `fromFoo` functions that attempt to parse and
-   unparse the resource part of the ARN:
+3. Define `parseFoo` and `renderFoo` functions that attempt to parse
+   and unparse the resource part of the ARN:
 
    ```haskell
-   toFunction :: Text -> Maybe Function
-   fromFunction :: Function -> Text
+   parseFunction :: Text -> Maybe Function
+   renderFunction :: Function -> Text
    ```
-
-   **Remark:** While these names sound backwards compared to
-   `fromText` and `toText`, it means we can have multiple parsing
-   functions in a single service's module.
 
    **Remark:** If you need to write tests for these functions, the
    corresponding module should live at
    `test/Network/AWS/ARN/SomeAWSService/Test.hs`
 
 4. Define a `_Foo` `Prism'` that combines the parsing/unparsing
-   functions above:
+   functions above. Use the local definitions of prisms in
+   `Network.AWS.ARN.Internal.Lens`:
 
    ```haskell
    _Function :: Prism' Text Function
    _Function = prism' fromFunction toFunction
    ```
 
-5. Add the records, its fields, its parsing/unparsing functions, and
-   its optics to the service module's export list:
+5. Add the records, their fields, its parsing/unparsing functions, and
+   prisms to the service module's export list:
 
    ```haskell
    module Network.AWS.ARN.Lambda
      ( -- * Functions
        Function (..),
-       toFunction,
-       fromFunction,
+       parseFunction,
+       renderFunction,
 
-       -- ** Function Optics
+       -- ** Prisms
        _Function,
-       fName,
-       fQualifier,
      )
    ```
 
