@@ -1,15 +1,15 @@
-{ mkDerivation, base, deriving-compat, hashable, lens, lib, tasty
-, tasty-discover, tasty-hunit, text
+{ mkDerivation, base, deriving-compat, hashable, lib, profunctors
+, tagged, tasty, tasty-discover, tasty-hunit, text
 }:
 mkDerivation {
   pname = "aws-arn";
-  version = "0.1.0.0";
+  version = "0.2.0.0";
   src = ./.;
   libraryHaskellDepends = [
-    base deriving-compat hashable lens text
+    base deriving-compat hashable profunctors tagged text
   ];
   testHaskellDepends = [
-    base deriving-compat lens tasty tasty-discover tasty-hunit text
+    base deriving-compat profunctors tagged tasty tasty-hunit text
   ];
   testToolDepends = [ tasty-discover ];
   description = "Types and optics for manipulating Amazon Resource Names (ARNs)";

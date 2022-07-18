@@ -10,7 +10,7 @@
 -- |
 --
 -- Module      : Network.AWS.ARN
--- Copyright   : (C) 2020-2021 Bellroy Pty Ltd
+-- Copyright   : (C) 2020-2022 Bellroy Pty Ltd
 -- License     : BSD-3-Clause
 -- Maintainer  : Bellroy Tech Team <haskell@bellroy.com>
 -- Stability   : experimental
@@ -33,11 +33,15 @@
 -- every endpoint in the stage:
 --
 -- @
+-- {-# LANGUAGE OverloadedLabels #-}
+-- -- This provides the necessary instances from generic-lens
+-- import Data.Generics.Labels ()
+--
 -- -- Returns "arn:aws:execute-api:us-east-1:123456789012:my-spiffy-api\/stage\/*"
 -- let
 --   authorizerSampleARN = "arn:aws:execute-api:us-east-1:123456789012:my-spiffy-api\/stage\/GET\/some\/deep\/path"
 -- in
---   over ('_ARN' . 'arnResource' . 'slashes') (\\parts -> take 2 parts ++ ["*"]) authorizerSampleARN
+--   over ('_ARN' . #resource . 'slashes') (\\parts -> take 2 parts ++ ["*"]) authorizerSampleARN
 -- @
 module Network.AWS.ARN
   ( ARN (..),
@@ -46,11 +50,6 @@ module Network.AWS.ARN
 
     -- * ARN Optics
     _ARN,
-    arnPartition,
-    arnService,
-    arnRegion,
-    arnAccount,
-    arnResource,
 
     -- * Utility Optics
     colons,
@@ -58,27 +57,31 @@ module Network.AWS.ARN
   )
 where
 
-import Control.Lens (Iso', Prism', iso, makeLenses, prism')
 import Data.Eq.Deriving (deriveEq1)
 import Data.Hashable (Hashable)
 import Data.Hashable.Lifted (Hashable1)
+import Data.List.NonEmpty (NonEmpty)
+import qualified Data.List.NonEmpty as NonEmpty
 import Data.Ord.Deriving (deriveOrd1)
 import Data.Text (Text)
 import qualified Data.Text as T
 import GHC.Generics (Generic, Generic1)
+import Network.AWS.ARN.Internal.Lens (Lens', Prism', prism')
 import Text.Show.Deriving (deriveShow1)
-
--- $setup
--- >>> :set -XOverloadedStrings
--- >>> import Control.Lens
 
 -- | A parsed ARN. Either use the '_ARN' 'Prism'', or the 'toARN' and
 -- 'fromARN' functions to convert @'Text' \<-\> 'ARN'@.  The
--- '_arnResource' part of an ARN will often contain colon- or
+-- 'resource' part of an ARN will often contain colon- or
 -- slash-separated parts which precisely identify some resource. If
 -- there is no service-specific module (see below), the 'colons' and
--- 'slashes' @'Control.Lens.Iso''@s in this module can pick apart the
--- `_arnResource` field.
+-- 'slashes' lenses in this module can pick apart the `resource`
+-- field.
+--
+-- If you want lenses into individual fields, use the
+-- [@generic-lens@](https://hackage.haskell.org/package/generic-lens)
+-- or
+-- [@generic-optics@](https://hackage.haskell.org/package/generic-optics)
+-- libraries.
 --
 -- == Service-Specific Modules
 --
@@ -86,12 +89,12 @@ import Text.Show.Deriving (deriveShow1)
 -- resource part of an ARN into something more specific:
 --
 -- @
--- -- Remark: Lambda._Function :: 'Prism'' 'Text' Lambda.Function
+-- -- Remark: Lambda._Function :: Prism' Text Lambda.Function
 -- -- Returns: Just "the-coolest-function-ever"
 -- let
 --   functionARN = "arn:aws:lambda:us-east-1:123456789012:function:the-coolest-function-ever:Alias"
 -- in
---   functionARN ^? _ARN . arnResource . Lambda._Function . Lambda.fName
+--   functionARN ^? _ARN . #resource . Lambda._Function . #name
 -- @
 --
 -- You can also use 'ARN'\'s 'Traversable' instance and
@@ -99,14 +102,14 @@ import Text.Show.Deriving (deriveShow1)
 -- resource type in 'ARN'\'s type variable:
 --
 -- @
--- '_ARN' . 'Control.Lens.Prism.below' Lambda._Function :: 'Prism'' 'Text' ('ARN' Lambda.Function)
+-- '_ARN' . 'Control.Lens.Prism.below' Lambda._Function :: Prism' Text ('ARN' Lambda.Function)
 -- @
 data ARN r = ARN
-  { _arnPartition :: Text,
-    _arnService :: Text,
-    _arnRegion :: Text,
-    _arnAccount :: Text,
-    _arnResource :: r
+  { partition :: Text,
+    service :: Text,
+    region :: Text,
+    account :: Text,
+    resource :: r
   }
   deriving
     ( Eq,
@@ -120,7 +123,6 @@ data ARN r = ARN
       Traversable
     )
 
-$(makeLenses ''ARN)
 $(deriveEq1 ''ARN)
 $(deriveOrd1 ''ARN)
 $(deriveShow1 ''ARN)
@@ -132,11 +134,11 @@ toARN t = case T.splitOn ":" t of
   ("arn" : part : srv : reg : acc : res) ->
     Just $
       ARN
-        { _arnPartition = part,
-          _arnService = srv,
-          _arnRegion = reg,
-          _arnAccount = acc,
-          _arnResource = T.intercalate ":" res
+        { partition = part,
+          service = srv,
+          region = reg,
+          account = acc,
+          resource = T.intercalate ":" res
         }
   _ -> Nothing
 
@@ -145,11 +147,11 @@ fromARN arn =
   T.intercalate
     ":"
     [ "arn",
-      _arnPartition arn,
-      _arnService arn,
-      _arnRegion arn,
-      _arnAccount arn,
-      _arnResource arn
+      partition arn,
+      service arn,
+      region arn,
+      account arn,
+      resource arn
     ]
 
 _ARN :: Prism' Text (ARN Text)
@@ -158,33 +160,31 @@ _ARN = prism' fromARN toARN
 
 -- | Split a 'Text' into colon-separated parts.
 --
--- This is not truly a lawful 'Iso'', but it is useful. The 'Iso''
--- laws are violated for lists whose members contain @':'@:
---
--- >>> [":"] ^. from colons . colons
--- ["",""]
---
--- The laws are also violated on empty lists:
---
--- >>> [] ^. from colons . colons
--- [""]
---
--- However, it is still a useful tool:
+-- This is useful for editing the resource part of an ARN:
 --
 -- >>> "foo:bar:baz" & colons . ix 1 .~ "quux"
 -- "foo:quux:baz"
-colons :: Iso' Text [Text]
-colons = iso (T.splitOn ":") (T.intercalate ":")
+--
+-- Writing back through the lens ignores the string it is applied to:
+--
+-- >>> "Hello, world!" & colons .~ "dude" :| ["sweet"]
+-- "dude:sweet"
+colons :: Lens' Text (NonEmpty Text)
+colons = splitOn ":"
 {-# INLINE colons #-}
 
 -- | Split a 'Text' into slash-separated parts.
 --
--- This is not truly a lawful 'Iso'', but it is useful:
---
 -- >>> "foo/bar/baz" ^. slashes
--- ["foo","bar","baz"]
+-- "foo" :| ["bar","baz"]
 --
--- Similar caveats to 'colons' apply here.
-slashes :: Iso' Text [Text]
-slashes = iso (T.splitOn "/") (T.intercalate "/")
+-- Similar caveats to 'colons' apply.
+slashes :: Lens' Text (NonEmpty Text)
+slashes = splitOn "/"
 {-# INLINE slashes #-}
+
+splitOn :: Text -> Lens' Text (NonEmpty Text)
+splitOn delim f t =
+  T.intercalate delim . NonEmpty.toList
+    <$> f (NonEmpty.fromList (T.splitOn delim t))
+{-# INLINE splitOn #-}

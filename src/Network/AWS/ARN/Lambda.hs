@@ -1,13 +1,12 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_HADDOCK show-extensions #-}
 
 -- |
 --
 -- Module      : Network.AWS.ARN.Lambda
--- Copyright   : (C) 2020-2021 Bellroy Pty Ltd
+-- Copyright   : (C) 2020-2022 Bellroy Pty Ltd
 -- License     : BSD-3-Clause
 -- Maintainer  : Bellroy Tech Team <haskell@bellroy.com>
 -- Stability   : experimental
@@ -19,44 +18,36 @@ module Network.AWS.ARN.Lambda
 
     -- ** Function Optics
     _Function,
-    fName,
-    fQualifier,
   )
 where
 
-import Control.Lens
 import Data.Hashable (Hashable)
 import Data.Maybe (maybeToList)
 import Data.Text (Text)
 import qualified Data.Text as T
 import GHC.Generics (Generic)
-
--- $setup
--- >>> :set -XOverloadedStrings
--- >>> import Control.Lens
+import Network.AWS.ARN.Internal.Lens (Prism', prism')
 
 -- | An AWS Lambda function name, and optional alias/version qualifier.
 --
 -- >>> "function:helloworld" ^? _Function
--- Just (Function {_fName = "helloworld", _fQualifier = Nothing})
+-- Just (Function {name = "helloworld", qualifier = Nothing})
 --
 -- >>> "function:helloworld:$LATEST" ^? _Function
--- Just (Function {_fName = "helloworld", _fQualifier = Just "$LATEST"})
+-- Just (Function {name = "helloworld", qualifier = Just "$LATEST"})
 --
 -- >>> "function:helloworld:42" ^? _Function
--- Just (Function {_fName = "helloworld", _fQualifier = Just "42"})
+-- Just (Function {name = "helloworld", qualifier = Just "42"})
 data Function = Function
-  { _fName :: Text,
-    _fQualifier :: Maybe Text
+  { name :: Text,
+    qualifier :: Maybe Text
   }
   deriving (Eq, Ord, Hashable, Show, Generic)
 
-$(makeLenses ''Function)
-
 toFunction :: Text -> Maybe Function
 toFunction t = case T.splitOn ":" t of
-  ("function" : name : qual) ->
-    Just (Function name) <*> case qual of
+  ("function" : nam : qual) ->
+    Just (Function nam) <*> case qual of
       [q] -> Just $ Just q
       [] -> Just Nothing
       _ -> Nothing
@@ -65,7 +56,7 @@ toFunction t = case T.splitOn ":" t of
 fromFunction :: Function -> Text
 fromFunction f =
   T.intercalate ":" $
-    ["function", _fName f] ++ maybeToList (_fQualifier f)
+    ["function", name f] ++ maybeToList (qualifier f)
 
 _Function :: Prism' Text Function
 _Function = prism' fromFunction toFunction
