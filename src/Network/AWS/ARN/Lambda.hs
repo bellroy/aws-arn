@@ -46,7 +46,6 @@ data Function = Function
   }
   deriving (Eq, Ord, Hashable, Show, Generic)
 
-
 -- | @since 0.2.0.0
 parseFunction :: Text -> Maybe Function
 parseFunction t = case T.splitOn ":" t of
