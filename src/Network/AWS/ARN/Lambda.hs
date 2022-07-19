@@ -38,12 +38,16 @@ import Network.AWS.ARN.Internal.Lens (Prism', prism')
 --
 -- >>> "function:helloworld:42" ^? _Function
 -- Just (Function {name = "helloworld", qualifier = Just "42"})
+--
+-- @since 0.2.0.0
 data Function = Function
   { name :: Text,
     qualifier :: Maybe Text
   }
   deriving (Eq, Ord, Hashable, Show, Generic)
 
+
+-- | @since 0.2.0.0
 parseFunction :: Text -> Maybe Function
 parseFunction t = case T.splitOn ":" t of
   ("function" : nam : qual) ->
@@ -53,10 +57,12 @@ parseFunction t = case T.splitOn ":" t of
       _ -> Nothing
   _ -> Nothing
 
+-- | @since 0.2.0.0
 renderFunction :: Function -> Text
 renderFunction f =
   T.intercalate ":" $
     ["function", name f] ++ maybeToList (qualifier f)
 
+-- | @since 0.1.0.0
 _Function :: Prism' Text Function
 _Function = prism' renderFunction parseFunction

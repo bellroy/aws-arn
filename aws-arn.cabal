@@ -5,10 +5,13 @@ synopsis:
   Types and optics for manipulating Amazon Resource Names (ARNs)
 
 description:
+
   This library provides a type representing [Amazon Resource Names
   (ARNs)](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html),
-  and parsing/unparsing functions for them. The provided optics make
-  it very convenient to rewrite parts of ARNs.
+  and parsing/unparsing functions for them. The provided prisms, when
+  combined with [generic-lens](https://hackage.haskell.org/package/generic-lens)
+  or [generic-optics](https://hackage.haskell.org/package/generic-optics),
+  make it very convenient to rewrite parts of ARNs.
   .
   Start reading at the "Network.AWS.ARN" module, which defines the
   core data type and includes some examples.

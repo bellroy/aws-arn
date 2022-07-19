@@ -104,6 +104,8 @@ import Text.Show.Deriving (deriveShow1)
 -- @
 -- '_ARN' . 'Control.Lens.Prism.below' Lambda._Function :: Prism' Text ('ARN' Lambda.Function)
 -- @
+--
+-- @since 0.1.0.0
 data ARN r = ARN
   { partition :: Text,
     service :: Text,
@@ -129,6 +131,7 @@ $(deriveShow1 ''ARN)
 
 deriving instance Hashable1 ARN
 
+-- | @since 0.2.0.0
 parseARN :: Text -> Maybe (ARN Text)
 parseARN t = case T.splitOn ":" t of
   ("arn" : part : srv : reg : acc : res) ->
@@ -142,6 +145,7 @@ parseARN t = case T.splitOn ":" t of
         }
   _ -> Nothing
 
+-- | @since 0.2.0.0
 renderARN :: ARN Text -> Text
 renderARN arn =
   T.intercalate
@@ -154,6 +158,7 @@ renderARN arn =
       resource arn
     ]
 
+-- | @since 0.1.0.0
 _ARN :: Prism' Text (ARN Text)
 _ARN = prism' renderARN parseARN
 {-# INLINE _ARN #-}
@@ -169,6 +174,8 @@ _ARN = prism' renderARN parseARN
 --
 -- >>> "Hello, world!" & colons .~ "dude" :| ["sweet"]
 -- "dude:sweet"
+--
+-- @since 0.2.0.0
 colons :: Lens' Text (NonEmpty Text)
 colons = splitOn ":"
 {-# INLINE colons #-}
@@ -179,6 +186,8 @@ colons = splitOn ":"
 -- "foo" :| ["bar","baz"]
 --
 -- Similar caveats to 'colons' apply.
+--
+-- @since 0.2.0.0
 slashes :: Lens' Text (NonEmpty Text)
 slashes = splitOn "/"
 {-# INLINE slashes #-}
