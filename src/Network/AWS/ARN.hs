@@ -36,12 +36,18 @@
 -- {-# LANGUAGE OverloadedLabels #-}
 -- -- This provides the necessary instances from generic-lens
 -- import Data.Generics.Labels ()
+-- import Data.List.NonEmpty (NonEmpty (..))
+-- import qualified Data.List.NonEmpty as NE
 --
 -- -- Returns "arn:aws:execute-api:us-east-1:123456789012:my-spiffy-api\/stage\/*"
 -- let
+--   -- In Data.List.NonEmpty since base-4.16
+--   prependList [] ys = ys
+--   prependList (x : xs) (y :| ys) = x :| xs ++ y : ys
+--
 --   authorizerSampleARN = "arn:aws:execute-api:us-east-1:123456789012:my-spiffy-api\/stage\/GET\/some\/deep\/path"
 -- in
---   over ('_ARN' . #resource . 'slashes') (\\parts -> take 2 parts ++ ["*"]) authorizerSampleARN
+--   over ('_ARN' . #resource . 'slashes') (\\parts -> prependList (NE.take 2 parts) ("*" :| [])) authorizerSampleARN
 -- @
 module Network.AWS.ARN
   ( ARN (..),
