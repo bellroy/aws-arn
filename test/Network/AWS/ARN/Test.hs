@@ -4,7 +4,6 @@
 module Network.AWS.ARN.Test where
 
 import Data.List.NonEmpty (NonEmpty (..))
-import qualified Data.List.NonEmpty as NonEmpty
 import Data.Text (Text)
 import Network.AWS.ARN
 import Network.AWS.ARN.Internal.Lens (Lens', over, preview, review)
@@ -33,10 +32,7 @@ test_all =
             (review _ARN <$> preview _ARN authorizerSampleARN)
               @?= Just authorizerSampleARN,
           testCase "edit path of Lambda Authorizer ARN" $
-            over
-              (_ARN . arnResource . slashes)
-              (\parts -> prependList (NonEmpty.take 2 parts) ("*" :| []))
-              authorizerSampleARN
+            over (_ARN . arnResource . slashes) (\parts -> take 2 parts ++ ["*"]) authorizerSampleARN
               @?= "arn:aws:execute-api:us-east-1:123456789012:my-spiffy-api/stage/*"
         ]
     ]
