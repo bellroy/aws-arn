@@ -1,6 +1,6 @@
 cabal-version:      2.2
 name:               aws-arn
-version:            0.2.0.0
+version:            0.3.0.0
 synopsis:
   Types and optics for manipulating Amazon Resource Names (ARNs)
 
