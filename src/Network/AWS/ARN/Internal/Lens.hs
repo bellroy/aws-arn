@@ -16,7 +16,7 @@ module Network.AWS.ARN.Internal.Lens where
 import Data.Functor.Const (Const (..))
 import Data.Functor.Identity (Identity (..))
 import Data.Monoid (First (..))
-import Data.Profunctor (dimap)
+import Data.Profunctor (Profunctor(..))
 import Data.Profunctor.Choice (Choice (..))
 import Data.Tagged (Tagged (..))
 
@@ -58,3 +58,9 @@ s ^? p = preview p s
 {-# INLINE (^?) #-}
 
 infixl 8 ^?
+
+type Iso' s a = forall p f . (Profunctor p, Functor f) => p a (f a) -> p s (f s)
+
+iso :: (s -> a) -> (a -> s) -> Iso' s a
+iso from to = dimap from (fmap to)
+{-# INLINE iso #-}

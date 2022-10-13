@@ -66,13 +66,11 @@ where
 import Data.Eq.Deriving (deriveEq1)
 import Data.Hashable (Hashable)
 import Data.Hashable.Lifted (Hashable1)
-import Data.List.NonEmpty (NonEmpty)
-import qualified Data.List.NonEmpty as NonEmpty
 import Data.Ord.Deriving (deriveOrd1)
 import Data.Text (Text)
 import qualified Data.Text as T
 import GHC.Generics (Generic, Generic1)
-import Network.AWS.ARN.Internal.Lens (Lens', Prism', prism')
+import Network.AWS.ARN.Internal.Lens (Iso', Prism', iso, prism')
 import Text.Show.Deriving (deriveShow1)
 
 -- | A parsed ARN. Either use the '_ARN' 'Prism'', or the 'parseARN' and
@@ -171,35 +169,41 @@ _ARN = prism' renderARN parseARN
 
 -- | Split a 'Text' into colon-separated parts.
 --
--- This is useful for editing the resource part of an ARN:
+-- This is an improper 'Iso'' (@Text.intercalate ":" . Text.splitOn
+-- ":" = id@, but @Text.splitOn ":" . Text.intercalate ":" /= id@).
+-- This causes violations of the 'Iso'' laws for lists whose members
+-- contain @\':\'@:
+--
+-- >>> [":"] ^. from colons . colons
+-- ["",""]
+--
+-- The laws are also violated on empty lists:
+--
+-- >>> [] ^. from colons . colons
+-- [""]
+--
+-- Nevertheless, it is still useful:
 --
 -- >>> "foo:bar:baz" & colons . ix 1 .~ "quux"
 -- "foo:quux:baz"
 --
--- Writing back through the lens ignores the string it is applied to:
+-- Ed [discusses improper
+-- optics](https://old.reddit.com/r/haskell/comments/32xva8/the_laws_of_asymmetric_wellbehaved_lenses_are/cqhq1gk/)
+-- in an old Reddit comment.
 --
--- >>> "Hello, world!" & colons .~ "dude" :| ["sweet"]
--- "dude:sweet"
---
--- @since 0.2.0.0
-colons :: Lens' Text (NonEmpty Text)
-colons = splitOn ":"
+-- @since 0.3.0.0
+colons :: Iso' Text [Text]
+colons = iso (T.splitOn ":") (T.intercalate ":")
 {-# INLINE colons #-}
 
 -- | Split a 'Text' into slash-separated parts.
 --
+-- List 'colons', this is an improper 'Iso'', but it is still useful:
+--
 -- >>> "foo/bar/baz" ^. slashes
--- "foo" :| ["bar","baz"]
+-- ["foo","bar","baz"]
 --
--- Similar caveats to 'colons' apply.
---
--- @since 0.2.0.0
-slashes :: Lens' Text (NonEmpty Text)
-slashes = splitOn "/"
+-- @since 0.3.0.0
+slashes :: Iso' Text [Text]
+slashes = iso (T.splitOn "/") (T.intercalate "/")
 {-# INLINE slashes #-}
-
-splitOn :: Text -> Lens' Text (NonEmpty Text)
-splitOn delim f t =
-  T.intercalate delim . NonEmpty.toList
-    <$> f (NonEmpty.fromList (T.splitOn delim t))
-{-# INLINE splitOn #-}
