@@ -1,5 +1,10 @@
 # Revision history for aws-arn
 
+## 0.3.0.0 -- 2022-10-14
+
+* Reinstate the improper `Iso'`s from version 0.1.x; the 0.2.0.0
+  lenses were also unlawful and the `Iso'`s are more ergonomic.
+
 ## 0.2.0.0 -- 2022-07-19
 
 * Rename `fromFoo`/`toFoo` to `renderFoo`/`parseFoo`:

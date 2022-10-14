@@ -28,6 +28,10 @@ import qualified Data.Text as T
 import GHC.Generics (Generic)
 import Network.AWS.ARN.Internal.Lens (Prism', prism')
 
+-- $setup
+-- >>> :set -XOverloadedStrings
+-- >>> import Network.AWS.ARN.Internal.Lens ((^?))
+
 -- | An AWS Lambda function name, and optional alias/version qualifier.
 --
 -- >>> "function:helloworld" ^? _Function

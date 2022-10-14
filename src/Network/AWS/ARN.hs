@@ -73,6 +73,11 @@ import GHC.Generics (Generic, Generic1)
 import Network.AWS.ARN.Internal.Lens (Iso', Prism', iso, prism')
 import Text.Show.Deriving (deriveShow1)
 
+-- $setup
+-- >>> :set -XOverloadedStrings
+-- >>> import Data.Function ((&))
+-- >>> import Network.AWS.ARN.Internal.Lens (from, ix, (.~), (^.), (^?))
+
 -- | A parsed ARN. Either use the '_ARN' 'Prism'', or the 'parseARN' and
 -- 'renderARN' functions to convert @'Text' \<-\> 'ARN'@.  The
 -- 'resource' part of an ARN will often contain colon- or
