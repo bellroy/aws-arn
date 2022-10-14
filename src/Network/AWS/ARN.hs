@@ -77,7 +77,7 @@ import Text.Show.Deriving (deriveShow1)
 -- 'resource' part of an ARN will often contain colon- or
 -- slash-separated parts which precisely identify some resource. If
 -- there is no service-specific module (see below), the 'colons' and
--- 'slashes' lenses in this module can pick apart the `resource`
+-- 'slashes' optics in this module can pick apart the `resource`
 -- field.
 --
 -- If you want lenses into individual fields, use the
