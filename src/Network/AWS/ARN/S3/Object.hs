@@ -47,27 +47,33 @@ import qualified Network.AWS.ARN.S3.Bucket as Bucket
 
 -- >>> containingBucket $ "bucket-name/my/object" ^? _S3Object
 -- Just (S3Bucket {bucketName = "bucket-name"})
+-- @since 0.3.1.0
 data S3Object = S3Object
   { bucketName :: Text,
     objectKey :: Text
   }
   deriving (Eq, Ord, Hashable, Show, Generic)
 
+-- @since 0.3.1.0
 objectInBucket :: Text -> Bucket.S3Bucket -> S3Object
 objectInBucket objectKey (Bucket.S3Bucket bucketName) = S3Object bucketName objectKey
 
+-- @since 0.3.1.0
 containingBucket :: S3Object -> Bucket.S3Bucket
 containingBucket = Bucket.S3Bucket . bucketName
 
+-- @since 0.3.1.0
 parseS3Object :: Text -> Maybe S3Object
 parseS3Object t = case T.breakOn "/" t of
   ("", _) -> Nothing
   (_, "") -> Nothing
   (bucket, object) -> Just $ S3Object bucket (T.drop 1 object)
 
+-- @since 0.3.1.0
 renderS3Object :: S3Object -> Text
 renderS3Object r =
   bucketName r <> "/" <> objectKey r
 
+-- @since 0.3.1.0
 _S3Object :: Prism' Text S3Object
 _S3Object = prism' renderS3Object parseS3Object

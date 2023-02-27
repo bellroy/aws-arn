@@ -39,19 +39,23 @@ import Network.AWS.ARN.Internal.Lens (Prism', prism')
 
 -- >>> "bucket-name/my/object" ^? _S3Bucket
 -- Nothing
+-- @since 0.3.1.0
 newtype S3Bucket = S3Bucket
   { bucketName :: Text
   }
   deriving stock (Eq, Ord, Show, Generic)
   deriving anyclass (Hashable)
 
+-- @since 0.3.1.0
 parseS3Bucket :: Text -> Maybe S3Bucket
 parseS3Bucket t = case T.breakOn "/" t of
   (bucket, "") -> Just $ S3Bucket bucket
   _ -> Nothing
 
+-- @since 0.3.1.0
 renderS3Bucket :: S3Bucket -> Text
 renderS3Bucket = bucketName
 
+-- @since 0.3.1.0
 _S3Bucket :: Prism' Text S3Bucket
 _S3Bucket = prism' renderS3Bucket parseS3Bucket
