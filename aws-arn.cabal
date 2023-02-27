@@ -65,8 +65,7 @@ library
     Network.AWS.ARN
     Network.AWS.ARN.Internal.Lens
     Network.AWS.ARN.Lambda
-    Network.AWS.ARN.S3.Bucket
-    Network.AWS.ARN.S3.Object
+    Network.AWS.ARN.S3
 
   build-depends:   hashable >=1.3.0.0 && <1.5
   hs-source-dirs:  src

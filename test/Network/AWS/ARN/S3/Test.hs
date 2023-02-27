@@ -5,8 +5,7 @@ module Network.AWS.ARN.S3.Test where
 
 import Data.Text (Text)
 import Network.AWS.ARN.Internal.Lens (Lens', set, (^?))
-import Network.AWS.ARN.S3.Bucket
-import Network.AWS.ARN.S3.Object
+import Network.AWS.ARN.S3
 import Test.Tasty
 import Test.Tasty.HUnit
 
@@ -15,18 +14,18 @@ test_all =
   testGroup
     "Network.AWS.ARN.S3"
     [ testGroup
-        "S3Object"
+        "Object"
         [ testGroup
             "parsing"
             [ testCase "s3 bucket" $
-                "bucket-name" ^? _S3Object @?= Nothing,
+                "bucket-name" ^? _Object @?= Nothing,
               testCase "s3 bucket and object" $
-                "bucket-name/my/object" ^? _S3Object @?= Just (S3Object "bucket-name" $ "my/object")
+                "bucket-name/my/object" ^? _Object @?= Just (Object "bucket-name" $ "my/object")
             ],
           testGroup
             "updating"
             [ testCase "setting object key" $
-                set (_S3Object . rObjectKey) "my/other/object" "bucket-name/my/object"
+                set (_Object . rObjectKey) "my/other/object" "bucket-name/my/object"
                   @?= "bucket-name/my/other/object"
             ]
         ]
@@ -35,12 +34,12 @@ test_all =
         [ testGroup
             "parsing"
             [ testCase "s3 bucket" $
-                "bucket-name" ^? _S3Bucket @?= Just (S3Bucket "bucket-name"),
+                "bucket-name" ^? _Bucket @?= Just (Bucket "bucket-name"),
               testCase "s3 bucket and object" $
-                "bucket-name/my/object" ^? _S3Bucket @?= Nothing
+                "bucket-name/my/object" ^? _Bucket @?= Nothing
             ]
         ]
     ]
 
-rObjectKey :: Lens' S3Object Text
-rObjectKey l r@S3Object {objectKey} = (\o -> r {objectKey = o}) <$> l objectKey
+rObjectKey :: Lens' Object Text
+rObjectKey l r@Object {objectKey} = (\o -> r {objectKey = o}) <$> l objectKey
