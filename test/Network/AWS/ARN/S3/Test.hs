@@ -20,7 +20,7 @@ test_all =
             [ testCase "s3 bucket" $
                 "bucket-name" ^? _Object @?= Nothing,
               testCase "s3 bucket and object" $
-                "bucket-name/my/object" ^? _Object @?= Just (Object "bucket-name" $ "my/object")
+                "bucket-name/my/object" ^? _Object @?= Just (Object (Bucket "bucket-name") "my/object")
             ],
           testGroup
             "updating"

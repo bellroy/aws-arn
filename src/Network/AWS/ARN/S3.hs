@@ -49,7 +49,7 @@ import Network.AWS.ARN.Internal.Lens (Prism', prism')
 -- | An AWS S3 object, made of a bucket and an object key.
 --
 -- >>> "bucket-name/my/object" ^? _Object
--- Just (Object {bucketName = "bucket-name", objectKey = "my/object"})
+-- Just (Object {bucket = Bucket {bucketName = "bucket-name"}, objectKey = "my/object"})
 
 -- >>> "bucket-name" ^? _Object
 -- Nothing
@@ -58,30 +58,30 @@ import Network.AWS.ARN.Internal.Lens (Prism', prism')
 -- Just (Bucket {bucketName = "bucket-name"})
 -- @since 0.3.1.0
 data Object = Object
-  { bucketName :: Text,
+  { bucket :: Bucket,
     objectKey :: Text
   }
   deriving (Eq, Ord, Hashable, Show, Generic)
 
 -- @since 0.3.1.0
 objectInBucket :: Text -> Bucket -> Object
-objectInBucket objectKey (Bucket bucketName) = Object bucketName objectKey
+objectInBucket objectKey bucket = Object bucket objectKey
 
 -- @since 0.3.1.0
 containingBucket :: Object -> Bucket
-containingBucket Object {bucketName} = Bucket {bucketName}
+containingBucket = bucket
 
 -- @since 0.3.1.0
 parseObject :: Text -> Maybe Object
 parseObject t = case T.breakOn "/" t of
   ("", _) -> Nothing
   (_, "") -> Nothing
-  (bucket, object) -> Just $ Object bucket (T.drop 1 object)
+  (bucketName, object) -> Just $ Object (Bucket bucketName) (T.drop 1 object)
 
 -- @since 0.3.1.0
 renderObject :: Object -> Text
-renderObject Object {bucketName, objectKey} =
-  bucketName <> "/" <> objectKey
+renderObject Object {bucket, objectKey} =
+  renderBucket bucket <> "/" <> objectKey
 
 -- @since 0.3.1.0
 _Object :: Prism' Text Object
