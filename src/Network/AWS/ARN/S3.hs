@@ -95,9 +95,7 @@ _Object = prism' renderObject parseObject
 -- >>> "bucket-name/my/object" ^? _Bucket
 -- Nothing
 -- @since 0.3.1.0
-newtype Bucket = Bucket
-  { bucketName :: Text
-  }
+newtype Bucket = Bucket {bucketName :: Text}
   deriving stock (Eq, Ord, Show, Generic)
   deriving anyclass (Hashable)
 
