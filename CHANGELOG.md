@@ -1,6 +1,6 @@
 # Revision history for aws-arn
 
-## 0.3.1.0 -- TODO
+## 0.3.1.0 -- 2023-03-01
 
 * Add `Network.AWS.ARN.S3` with support for S3 bucket and object ARNs.
 
