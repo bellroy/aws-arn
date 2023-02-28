@@ -2,7 +2,7 @@
 
 ## 0.3.1.0 -- TODO
 
-* Add `Network.AWS.ARN.S3` with support for S3 bucket and objects ARNs.
+* Add `Network.AWS.ARN.S3` with support for S3 bucket and object ARNs.
 
 ## 0.3.0.0 -- 2022-10-14
 
