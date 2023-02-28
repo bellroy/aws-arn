@@ -19,19 +19,13 @@ module Network.AWS.ARN.S3
     parseObject,
     renderObject,
 
-    -- ** Prisms
-    _Object,
-
-    -- ** Conversions to bucket names
-    objectInBucket,
-    containingBucket,
-
     -- * S3 Bucket
     Bucket (..),
     parseBucket,
     renderBucket,
 
     -- ** Prisms
+    _Object,
     _Bucket,
   )
 where
@@ -50,12 +44,13 @@ import Network.AWS.ARN.Internal.Lens (Prism', prism')
 --
 -- >>> "bucket-name/my/object" ^? _Object
 -- Just (Object {bucket = Bucket {bucketName = "bucket-name"}, objectKey = "my/object"})
-
+--
 -- >>> "bucket-name" ^? _Object
 -- Nothing
-
--- >>> containingBucket $ "bucket-name/my/object" ^? _Object
+--
+-- >>> bucket <$> "bucket-name/my/object" ^? _Object
 -- Just (Bucket {bucketName = "bucket-name"})
+--
 -- @since 0.3.1.0
 data Object = Object
   { bucket :: Bucket,
@@ -63,27 +58,19 @@ data Object = Object
   }
   deriving (Eq, Ord, Hashable, Show, Generic)
 
--- @since 0.3.1.0
-objectInBucket :: Text -> Bucket -> Object
-objectInBucket objectKey bucket = Object bucket objectKey
-
--- @since 0.3.1.0
-containingBucket :: Object -> Bucket
-containingBucket = bucket
-
--- @since 0.3.1.0
+-- | @since 0.3.1.0
 parseObject :: Text -> Maybe Object
 parseObject t = case T.breakOn "/" t of
   ("", _) -> Nothing
   (_, "") -> Nothing
   (bucketName, object) -> Just $ Object (Bucket bucketName) (T.drop 1 object)
 
--- @since 0.3.1.0
+-- | @since 0.3.1.0
 renderObject :: Object -> Text
 renderObject Object {bucket, objectKey} =
   renderBucket bucket <> "/" <> objectKey
 
--- @since 0.3.1.0
+-- | @since 0.3.1.0
 _Object :: Prism' Text Object
 _Object = prism' renderObject parseObject
 
@@ -91,24 +78,28 @@ _Object = prism' renderObject parseObject
 --
 -- >>> "bucket-name" ^? _Bucket
 -- Just (Bucket {bucketName = "bucket-name"})
-
+--
 -- >>> "bucket-name/my/object" ^? _Bucket
 -- Nothing
+--
+-- >>> let b = Bucket "my-bucket" in renderObject . Object b <$> ["obj1", "obj2"]
+-- ["my-bucket/obj1","my-bucket/obj2"]
+--
 -- @since 0.3.1.0
 newtype Bucket = Bucket {bucketName :: Text}
   deriving stock (Eq, Ord, Show, Generic)
   deriving anyclass (Hashable)
 
--- @since 0.3.1.0
+-- | @since 0.3.1.0
 parseBucket :: Text -> Maybe Bucket
 parseBucket t = case T.breakOn "/" t of
   (bucket, "") -> Just $ Bucket bucket
   _ -> Nothing
 
--- @since 0.3.1.0
+-- | @since 0.3.1.0
 renderBucket :: Bucket -> Text
 renderBucket Bucket {bucketName} = bucketName
 
--- @since 0.3.1.0
+-- | @since 0.3.1.0
 _Bucket :: Prism' Text Bucket
 _Bucket = prism' renderBucket parseBucket
