@@ -1,5 +1,9 @@
 # Revision history for aws-arn
 
+## 0.3.1.0 -- TODO
+
+* Add `Network.AWS.ARN.S3` with support for S3 bucket and object ARNs.
+
 ## 0.3.0.0 -- 2022-10-14
 
 * Reinstate the improper `Iso'`s from version 0.1.x; the 0.2.0.0
