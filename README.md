@@ -97,5 +97,7 @@ The formatters used in this repo are provided by `shell.nix`:
 This repo uses `haskell-ci`, which is provided by `shell.nix`:
 
 ```shell
-haskell-ci regenerate
+haskell-ci --hlint-version '>=3.5 && <3.6' regenerate
 ```
+
+(`--hlint-version` will not be required once https://github.com/haskell-CI/haskell-ci/commit/bf3416439f3b00f0ee14130f9efe93e63345ca51 is released.)
