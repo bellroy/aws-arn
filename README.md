@@ -80,19 +80,19 @@ add a new resource:
 
 6. Test your work and make a PR.
 
-## Formatters
+## Formatting code
 
 The formatters used in this repo are provided by `shell.nix`:
 
-* `*.hs`: [`ormolu`](https://github.com/tweag/ormolu)
-* `*.cabal`:
+- `*.hs`: [`ormolu`](https://github.com/tweag/ormolu)
+- `*.cabal`:
   [`cabal-fmt`](https://hackage.haskell.org/package/cabal-fmt)
   (`cabal-fmt --inplace aws-arn.cabal`)
-* `*.nix`:
+- `*.nix`:
   [`nixpkgs-fmt`](https://github.com/nix-community/nixpkgs-fmt)
   (`nixpkgs-fmt *.nix`)
 
-## Regenerate CI
+## Regenerating CI
 
 This repo uses `haskell-ci`, which is provided by `shell.nix`:
 
