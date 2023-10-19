@@ -14,23 +14,18 @@
     inputs.flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import inputs.nixpkgs { inherit system; };
-        makePackage = haskellPackages: (haskellPackages.override {
-          overrides = final: prev: with pkgs.haskell.lib; {
-            hedgehog = prev.callHackage "hedgehog" "1.2" { };
-            tasty-discover = prev.callHackage "tasty-discover" "5.0.0" { };
-            tasty-hedgehog = prev.callHackage "tasty-hedgehog" "1.4.0.0" { };
-          };
-        }).callPackage ./aws-arn.nix
-          { };
+        makePackage = haskellPackages:
+          haskellPackages.callPackage ./aws-arn.nix { };
       in
       rec
       {
         packages = {
           default = makePackage pkgs.haskellPackages;
-          ghc884 = makePackage pkgs.haskell.packages.ghc884;
-          ghc902 = makePackage pkgs.haskell.packages.ghc902;
-          ghc925 = makePackage pkgs.haskell.packages.ghc925;
-          ghc943 = makePackage pkgs.haskell.packages.ghc943;
+          ghc810 = makePackage pkgs.haskell.packages.ghc810;
+          ghc90 = makePackage pkgs.haskell.packages.ghc90;
+          ghc92 = makePackage pkgs.haskell.packages.ghc92;
+          ghc94 = makePackage pkgs.haskell.packages.ghc94;
+          ghc96 = makePackage pkgs.haskell.packages.ghc96;
         };
 
         devShells = builtins.mapAttrs
