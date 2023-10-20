@@ -1,5 +1,27 @@
 {
   "nodes": {
+    "bellroy-nix-foss": {
+      "inputs": {
+        "flake-compat": "flake-compat",
+        "flake-utils": "flake-utils",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1693268846,
+        "narHash": "sha256-w3yK1C6/JsBVvZRKnZw4HPBajYWpcA2BR3t13mfALzE=",
+        "owner": "bellroy",
+        "repo": "bellroy-nix-foss",
+        "rev": "5c8b2fe6bf30b858dce75809d0caf6ccbf1c9f0e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bellroy",
+        "repo": "bellroy-nix-foss",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -21,11 +43,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1689068808,
-        "narHash": "sha256-6ixXo3wt24N/melDWjq70UuHQLxGV8jZvooRanIHXw0=",
+        "lastModified": 1687709756,
+        "narHash": "sha256-Y5wKlQSkgEK2weWdOu4J3riRd+kV/VCgHsqLNTTWQ/0=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "919d646de7be200f3bf08cb76ae1f09402b6f9b4",
+        "rev": "dbabf0ca0c0c4bce6ea5eaf65af5cb694d2082c7",
         "type": "github"
       },
       "original": {
@@ -36,11 +58,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1692661598,
-        "narHash": "sha256-a+ZFNMcqZsB0tTkSM0LvYtxk1IUmWlFc42JWnR4AeAE=",
+        "lastModified": 1697700926,
+        "narHash": "sha256-4tQvS/t7Dt19L7GwjZ2D2r3M0LKtFxhG6BEGitDyUhQ=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "a1a55a20a6a4687bd6ec69638a27047a9ba0fbb3",
+        "rev": "2bbf67d3c76927b5c3148f32c0e93c14e5dbc2d9",
         "type": "github"
       },
       "original": {
@@ -51,8 +73,7 @@
     },
     "root": {
       "inputs": {
-        "flake-compat": "flake-compat",
-        "flake-utils": "flake-utils",
+        "bellroy-nix-foss": "bellroy-nix-foss",
         "nixpkgs": "nixpkgs"
       }
     },
