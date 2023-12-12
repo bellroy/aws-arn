@@ -9,11 +9,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1693268846,
+        "lastModified": 1697772615,
         "narHash": "sha256-w3yK1C6/JsBVvZRKnZw4HPBajYWpcA2BR3t13mfALzE=",
         "owner": "bellroy",
         "repo": "bellroy-nix-foss",
-        "rev": "5c8b2fe6bf30b858dce75809d0caf6ccbf1c9f0e",
+        "rev": "35391828c0526c0ce7bfa52c3dfb49e818f8740f",
         "type": "github"
       },
       "original": {
@@ -58,11 +58,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1697700926,
-        "narHash": "sha256-4tQvS/t7Dt19L7GwjZ2D2r3M0LKtFxhG6BEGitDyUhQ=",
+        "lastModified": 1702332876,
+        "narHash": "sha256-Fno6z8xYd2oORvtFuojguIY6Y6HCGHTfxdymgVQ+lRM=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "2bbf67d3c76927b5c3148f32c0e93c14e5dbc2d9",
+        "rev": "eef6384e98b48f0c12f8e74a387f4427959f1bdf",
         "type": "github"
       },
       "original": {
