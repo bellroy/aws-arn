@@ -10,13 +10,15 @@
   };
 
   outputs = inputs: inputs.bellroy-nix-foss.lib.haskellProject {
-    cabalPackages = [
-      {
-        name = "aws-arn";
-        path = ./aws-arn.nix;
-      }
+    src = ./.;
+    supportedCompilers = [
+      "ghc810"
+      "ghc90"
+      "ghc92"
+      "ghc94"
+      "ghc96"
+      "ghc98"
     ];
-    supportedCompilers = [ "ghc810" "ghc90" "ghc92" "ghc94" "ghc96" ];
-    defaultCompiler = "ghc92";
+    defaultCompiler = "ghc96";
   };
 }
