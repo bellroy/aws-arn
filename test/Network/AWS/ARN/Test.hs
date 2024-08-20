@@ -5,8 +5,8 @@ module Network.AWS.ARN.Test where
 
 import Data.List.NonEmpty (NonEmpty (..))
 import Data.Text (Text)
+import Lens.Micro.Pro (Lens', over, preview, review)
 import Network.AWS.ARN
-import Network.AWS.ARN.Internal.Lens (Lens', over, preview, review)
 import Test.Tasty
 import Test.Tasty.HUnit
 

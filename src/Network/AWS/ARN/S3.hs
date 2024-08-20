@@ -34,11 +34,11 @@ import Data.Hashable (Hashable)
 import Data.Text (Text)
 import qualified Data.Text as T
 import GHC.Generics (Generic)
-import Network.AWS.ARN.Internal.Lens (Prism', prism')
+import Lens.Micro.Pro (Prism', prism')
 
 -- $setup
 -- >>> :set -XOverloadedStrings
--- >>> import Network.AWS.ARN.Internal.Lens ((^?))
+-- >>> import Lens.Micro.Pro ((^?))
 
 -- | An AWS S3 object, made of a bucket and an object key.
 --

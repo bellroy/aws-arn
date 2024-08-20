@@ -4,7 +4,7 @@
 module Network.AWS.ARN.Lambda.Test where
 
 import Data.Text (Text)
-import Network.AWS.ARN.Internal.Lens (Lens', set, (^?))
+import Lens.Micro.Pro (Lens', set, (^?))
 import Network.AWS.ARN.Lambda
 import Test.Tasty
 import Test.Tasty.HUnit
