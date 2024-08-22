@@ -1,6 +1,6 @@
 # Revision history for aws-arn
 
-## 0.3.2.0 -- 2024-08-20
+## 0.3.2.0 -- 2024-08-22
 
 * Use prisms and isos from `microlens-pro`.
 
