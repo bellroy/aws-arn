@@ -1,6 +1,6 @@
-cabal-version:      2.2
-name:               aws-arn
-version:            0.3.2.0
+cabal-version:   2.2
+name:            aws-arn
+version:         0.3.2.0
 synopsis:
   Types and optics for manipulating Amazon Resource Names (ARNs)
 
@@ -25,15 +25,15 @@ description:
   add this support for more AWS resource types are __especially__
   welcome.
 
-bug-reports:        http://github.com/bellroy/aws-arn/issues
-license:            BSD-3-Clause
-license-file:       LICENSE
-author:             Bellroy Tech Team <haskell@bellroy.com>
-maintainer:         Bellroy Tech Team <haskell@bellroy.com>
-copyright:          Copyright (C) 2020-2022 Bellroy Pty Ltd
-category:           AWS, Cloud
-build-type:         Simple
-extra-source-files:
+bug-reports:     http://github.com/bellroy/aws-arn/issues
+license:         BSD-3-Clause
+license-file:    LICENSE
+author:          Bellroy Tech Team <haskell@bellroy.com>
+maintainer:      Bellroy Tech Team <haskell@bellroy.com>
+copyright:       Copyright (C) 2020-2022 Bellroy Pty Ltd
+category:        AWS, Cloud
+build-type:      Simple
+extra-doc-files:
   CHANGELOG.md
   README.md
 
