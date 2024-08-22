@@ -4,7 +4,7 @@
 module Network.AWS.ARN.S3.Test where
 
 import Data.Text (Text)
-import Network.AWS.ARN.Internal.Lens (Lens', set, (^?))
+import Lens.Micro.Pro (Lens', set, (^?))
 import Network.AWS.ARN.S3
 import Test.Tasty
 import Test.Tasty.HUnit
@@ -28,8 +28,8 @@ test_all =
                 set (_Object . rObjectKey) "my/other/object" "bucket-name/my/object"
                   @?= "bucket-name/my/other/object"
             ]
-        ]
-    , testGroup
+        ],
+      testGroup
         "S3 bucket"
         [ testGroup
             "parsing"

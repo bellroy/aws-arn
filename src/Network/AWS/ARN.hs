@@ -64,13 +64,13 @@ import Data.Ord.Deriving (deriveOrd1)
 import Data.Text (Text)
 import qualified Data.Text as T
 import GHC.Generics (Generic, Generic1)
-import Network.AWS.ARN.Internal.Lens (Iso', Prism', iso, prism')
+import Lens.Micro.Pro (Iso', Prism', iso, prism')
 import Text.Show.Deriving (deriveShow1)
 
 -- $setup
 -- >>> :set -XOverloadedStrings
 -- >>> import Data.Function ((&))
--- >>> import Network.AWS.ARN.Internal.Lens (from, ix, (.~), (^.), (^?))
+-- >>> import Lens.Micro.Pro (from, ix, (.~), (^.), (^?))
 
 -- | A parsed ARN. Either use the '_ARN' 'Prism'', or the 'parseARN' and
 -- 'renderARN' functions to convert @'Text' \<-\> 'ARN'@.  The

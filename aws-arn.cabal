@@ -1,6 +1,6 @@
-cabal-version:      2.2
-name:               aws-arn
-version:            0.3.1.0
+cabal-version:   2.2
+name:            aws-arn
+version:         0.3.2.0
 synopsis:
   Types and optics for manipulating Amazon Resource Names (ARNs)
 
@@ -25,20 +25,20 @@ description:
   add this support for more AWS resource types are __especially__
   welcome.
 
-bug-reports:        http://github.com/bellroy/aws-arn/issues
-license:            BSD-3-Clause
-license-file:       LICENSE
-author:             Bellroy Tech Team <haskell@bellroy.com>
-maintainer:         Bellroy Tech Team <haskell@bellroy.com>
-copyright:          Copyright (C) 2020-2022 Bellroy Pty Ltd
-category:           AWS, Cloud
-build-type:         Simple
-extra-source-files:
+bug-reports:     http://github.com/bellroy/aws-arn/issues
+license:         BSD-3-Clause
+license-file:    LICENSE
+author:          Bellroy Tech Team <haskell@bellroy.com>
+maintainer:      Bellroy Tech Team <haskell@bellroy.com>
+copyright:       Copyright (C) 2020-2022 Bellroy Pty Ltd
+category:        AWS, Cloud
+build-type:      Simple
+extra-doc-files:
   CHANGELOG.md
   README.md
 
 tested-with:
-  GHC ==8.10.7 || ==9.0.2 || ==9.2.5 || ==9.4.5 || ==9.6.5
+  GHC ==8.10.7 || ==9.0.2 || ==9.2.5 || ==9.4.5 || ==9.6.6 || ==9.8.2
 
 common opts
   default-language: Haskell2010
@@ -51,21 +51,21 @@ common opts
 
 common deps
   build-depends:
-    , base             >=4.12   && <4.19
+    , base             >=4.12   && <4.20
     , deriving-compat  >=0.5.10 && <0.7
+    , microlens-pro    ^>=0.2
     , profunctors      >=5.0    && <5.7
     , tagged           ^>=0.8
-    , text             ^>=1.2.3 || >=2.0 && <2.1 || ^>=2.1
+    , text             ^>=1.2.3 || ^>=2.0 || ^>=2.1
 
 library
   import:          opts, deps
   exposed-modules:
     Network.AWS.ARN
-    Network.AWS.ARN.Internal.Lens
     Network.AWS.ARN.Lambda
     Network.AWS.ARN.S3
 
-  build-depends:   hashable >=1.3.0.0 && <1.5
+  build-depends:   hashable >=1.3.0.0 && <1.6
   hs-source-dirs:  src
 
 test-suite spec
@@ -81,7 +81,7 @@ test-suite spec
   ghc-options:        -threaded
   build-depends:
     , aws-arn
-    , tasty        >=1.4.0.2   && <1.5 || ^>=1.5
+    , tasty        ^>=1.4.0.2  || ^>=1.5
     , tasty-hunit  ^>=0.10.0.3
 
   build-tool-depends: tasty-discover:tasty-discover >=4.2.2 && <5.1

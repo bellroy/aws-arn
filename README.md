@@ -55,8 +55,7 @@ add a new resource:
    `test/Network/AWS/ARN/SomeAWSService/Test.hs`
 
 4. Define a `_Foo` `Prism'` that combines the parsing/unparsing
-   functions above. Use the local definitions of prisms in
-   `Network.AWS.ARN.Internal.Lens`:
+   functions above:
 
    ```haskell
    _Function :: Prism' Text Function
