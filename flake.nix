@@ -18,6 +18,7 @@
       "ghc94"
       "ghc96"
       "ghc98"
+      "ghc910"
     ];
     defaultCompiler = "ghc96";
   };
