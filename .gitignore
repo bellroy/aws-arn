@@ -2,3 +2,5 @@
 cabal.project.local*
 dist/
 dist-newstyle/
+.direnv
+.envrc
