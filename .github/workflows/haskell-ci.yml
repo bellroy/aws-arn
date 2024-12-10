@@ -204,7 +204,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - "${{ fromJSON(needs.generate-matrix.outputs.matrix) }}"
+          - "${{ (fromJSON(needs.generate-matrix.outputs.matrix)).include }}"
     timeout-minutes: 30
 name: Haskell CI
 on:
