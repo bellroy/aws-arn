@@ -21,6 +21,9 @@ jobs:
     name: ${{ matrix.ghc }} on ${{ matrix.os }}
     needs: generate-matrix
     runs-on: ${{ matrix.os }}
+    container:
+      image: buildpack-deps:jammy
+    continue-on-error: ${{ matrix.allow-failure }}
     strategy:
       matrix: ${{ fromJSON(needs.generate-matrix.outputs.matrix) }}
     steps:
