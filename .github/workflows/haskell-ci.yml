@@ -21,7 +21,6 @@ jobs:
           echo "${{ steps.set-matrix.outputs.matrix }}"
           echo "${{ fromJSON(steps.set-matrix.outputs.matrix) }}"
           echo "${{ (fromJSON(steps.set-matrix.outputs.matrix)).os }}"
-          echo "${{ fromJSON(steps.set-matrix.outputs.matrix.os) }}"
     timeout-minutes: 30
   tests:
     container:
