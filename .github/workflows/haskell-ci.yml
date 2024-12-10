@@ -15,7 +15,6 @@ jobs:
         with:
           cabal-file: aws-arn.cabal
           ubuntu-version: "20.04"
-          macos-version: "latest"
           version: 0.1.7.1
   tests:
     name: ${{ matrix.ghc }} on ${{ matrix.os }}
