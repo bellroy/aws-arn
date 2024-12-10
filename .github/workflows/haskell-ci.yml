@@ -1,7 +1,6 @@
 name: Haskell CI
 on:
   - push
-  - pull_request
 jobs:
   generate-matrix:
     name: "Generate matrix from cabal"
