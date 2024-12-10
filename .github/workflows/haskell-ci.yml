@@ -195,6 +195,10 @@ jobs:
         with:
           key: "${{ runner.os }}-${{ matrix.ghc }}-${{ github.sha }}"
           path: "~/.cabal/store"
+    strategy:
+      matrix:
+        include:
+          - "${{ fromJSON(needs.generate-matrix.outputs.matrix) }}"
     timeout-minutes: 30
 name: Haskell CI
 on:
