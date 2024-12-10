@@ -79,13 +79,13 @@ jobs:
           build-summary:     $CABAL_DIR/logs/build.log
           store-dir:         $CABAL_DIR/store
           install-dirs user
-              prefix: $CABAL_DIR
+            prefix: $CABAL_DIR
           repository hackage.haskell.org
-              url: http://hackage.haskell.org/
+            url: http://hackage.haskell.org/
           EOF
           cat >> $CABAL_CONFIG <<EOF
           program-default-options
-              ghc-options: $GHCJOBS +RTS -M3G -RTS
+            ghc-options: $GHCJOBS +RTS -M3G -RTS
           EOF
           cat $CABAL_CONFIG
       - name: versions
