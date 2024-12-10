@@ -15,6 +15,10 @@ jobs:
           cabal-file: aws-arn.cabal
           ubuntu-version: '20.04'
           version: '0.1.7.1'
+      - id: set-outputs
+        name: Extract get-tested outputs
+        run: |
+          echo "${{ fromJSON(steps.set-matrix.outputs.matrix) }}"
     timeout-minutes: 30
   tests:
     container:
