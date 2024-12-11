@@ -138,12 +138,12 @@ jobs:
           find sdist -maxdepth 1 -type f -name '*.tar.gz' -exec tar -C $GITHUB_WORKSPACE/unpacked -xzvf {} \;
       - name: generate cabal.project
         run: |
-          PKGDIR_aws_arn="$(find "$GITHUB_WORKSPACE/unpacked" -maxdepth 1 -type d -regex '.*/aws-arn-[0-9.]*')"
-          echo "PKGDIR_aws_arn=${PKGDIR_aws_arn}" >> "$GITHUB_ENV"
+          PKGDIR_PROJECT="$(find "$GITHUB_WORKSPACE/unpacked" -maxdepth 1 -type d -regex '.*/aws-arn-[0-9.]*')"
+          echo "PKGDIR_PROJECT=${PKGDIR_PROJECT}" >> "$GITHUB_ENV"
           rm -f cabal.project cabal.project.local
           touch cabal.project
           touch cabal.project.local
-          echo "packages: ${PKGDIR_aws_arn}" >> cabal.project
+          echo "packages: ${PKGDIR_PROJECT}" >> cabal.project
           echo "package aws-arn" >> cabal.project
           echo "    ghc-options: -Werror=missing-methods" >> cabal.project
           cat >> cabal.project <<EOF
@@ -176,11 +176,11 @@ jobs:
           $CABAL v2-test $ARG_COMPILER $ARG_TESTS $ARG_BENCH all --test-show-details=direct
       - name: doctest
         run: |
-          cd ${PKGDIR_aws_arn} || false
+          cd ${PKGDIR_PROJECT} || false
           doctest  -XHaskell2010 src
       - name: cabal check
         run: |
-          cd ${PKGDIR_aws_arn} || false
+          cd ${PKGDIR_PROJECT} || false
           ${CABAL} -vnormal check
       - name: haddock
         run: |
