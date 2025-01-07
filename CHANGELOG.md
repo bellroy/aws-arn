@@ -1,5 +1,9 @@
 # Revision history for aws-arn
 
+## Unreleased (patch)
+
+* Remove direct dependency on `profunctors`.
+
 ## 0.3.2.0 -- 2024-08-22
 
 * Use prisms and isos from `microlens-pro`.
