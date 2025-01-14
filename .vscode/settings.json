@@ -1,0 +1,20 @@
+{
+  "runOnSave.commands": [
+    {
+      "globMatch": "**/*.hs",
+      "command": "ormolu -i ${file}"
+    },
+    {
+      "globMatch": "**/*.cabal",
+      "command": "cabal-fmt --inplace ${file}"
+    },
+    {
+      "globMatch": "**/*.nix",
+      "command": "nixpkgs-fmt ${file}"
+    },
+    {
+      "globMatch": "**/*.dhall",
+      "command": "dhall format ${file} --unicode"
+    }
+  ]
+}
