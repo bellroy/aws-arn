@@ -37,8 +37,10 @@ parseStateMachine t = case T.splitOn ":" t of
     Just (StateMachine nam)
   _ -> Nothing
 
+-- | @since 0.3.3.0
 renderStateMachine :: StateMachine -> Text
 renderStateMachine (StateMachine nam) = "stateMachine:" <> nam
 
+-- | @since 0.3.3.0
 _StateMachine :: Prism' Text StateMachine
 _StateMachine = prism' renderStateMachine parseStateMachine
