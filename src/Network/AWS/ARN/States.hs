@@ -24,13 +24,13 @@ import Lens.Micro.Pro (Prism', prism')
 -- >>> "stateMachine:orderProcessor" ^? _StateMachine
 -- Just (StateMachine {name = "orderProcessor"})
 --
--- @since 0.2.3.0
+-- @since 0.3.3.0
 newtype StateMachine = StateMachine
   { name :: Text
   }
   deriving (Eq, Ord, Hashable, Show, Generic)
 
--- | @since 0.2.3.0
+-- | @since 0.3.3.0
 parseStateMachine :: Text -> Maybe StateMachine
 parseStateMachine t = case T.splitOn ":" t of
   ["stateMachine", nam] ->
