@@ -21,10 +21,13 @@ import Lens.Micro.Pro (Prism', prism')
 -- >>> :set -XOverloadedStrings
 -- >>> import Lens.Micro.Pro ((^?))
 
--- | An AWS State Machine, made of its name.
+-- | An AWS State Machine, made of its name and optional qualifier.
 --
 -- >>> "stateMachine:orderProcessor" ^? _StateMachine
--- Just (StateMachine {name = "orderProcessor"})
+-- Just (StateMachine {name = "orderProcessor", qualifier = Nothing})
+--
+-- >>> "stateMachine:orderProcessor:v2" ^? _StateMachine
+-- Just (StateMachine {name = "orderProcessor", qualifier = Just "v2"})
 --
 -- @since 0.3.3.0
 data StateMachine = StateMachine

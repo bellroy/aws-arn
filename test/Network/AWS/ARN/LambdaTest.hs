@@ -1,7 +1,7 @@
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Network.AWS.ARN.Lambda.Test where
+module Network.AWS.ARN.LambdaTest where
 
 import Data.Text (Text)
 import Lens.Micro.Pro (Lens', set, (^?))

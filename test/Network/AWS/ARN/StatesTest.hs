@@ -1,7 +1,7 @@
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Network.AWS.ARN.States.Test where
+module Network.AWS.ARN.StatesTest where
 
 import Data.Text (Text)
 import Lens.Micro.Pro (Lens', set, (^?))

@@ -79,10 +79,10 @@ test-suite spec
   type:               exitcode-stdio-1.0
   main-is:            Main.hs
   other-modules:
-    Network.AWS.ARN.Lambda.Test
-    Network.AWS.ARN.S3.Test
-    Network.AWS.ARN.States.Test
-    Network.AWS.ARN.Test
+    Network.AWS.ARN.LambdaTest
+    Network.AWS.ARN.S3Test
+    Network.AWS.ARN.StatesTest
+    Network.AWS.ARNTest
 
   hs-source-dirs:     test
   ghc-options:        -threaded
