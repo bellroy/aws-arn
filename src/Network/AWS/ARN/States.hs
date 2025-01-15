@@ -5,11 +5,13 @@
 module Network.AWS.ARN.States
   ( StateMachine (..),
     parseStateMachine,
+    renderStateMachine,
     _StateMachine,
   )
 where
 
 import Data.Hashable (Hashable)
+import Data.Maybe (maybeToList)
 import Data.Text (Text)
 import qualified Data.Text as T
 import GHC.Generics (Generic)
@@ -25,21 +27,27 @@ import Lens.Micro.Pro (Prism', prism')
 -- Just (StateMachine {name = "orderProcessor"})
 --
 -- @since 0.3.3.0
-newtype StateMachine = StateMachine
+data StateMachine = StateMachine
   { name :: Text
+  , qualifier :: Maybe Text
   }
   deriving (Eq, Ord, Hashable, Show, Generic)
 
 -- | @since 0.3.3.0
 parseStateMachine :: Text -> Maybe StateMachine
 parseStateMachine t = case T.splitOn ":" t of
-  ["stateMachine", nam] ->
-    Just (StateMachine nam)
+  ("stateMachine" : nam : qual) ->
+    Just (StateMachine nam) <*> case qual of
+      [q] -> Just $ Just q
+      [] -> Just Nothing
+      _ -> Nothing
   _ -> Nothing
 
 -- | @since 0.3.3.0
 renderStateMachine :: StateMachine -> Text
-renderStateMachine (StateMachine nam) = "stateMachine:" <> nam
+renderStateMachine s =
+  T.intercalate ":" $
+    ["stateMachine", name s] ++ maybeToList (qualifier s)
 
 -- | @since 0.3.3.0
 _StateMachine :: Prism' Text StateMachine
