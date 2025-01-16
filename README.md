@@ -52,7 +52,7 @@ add a new resource:
 
    **Remark:** If you need to write tests for these functions, the
    corresponding module should live at
-   `test/Network/AWS/ARN/SomeAWSService/Test.hs`
+   `test/Network/AWS/ARN/SomeAWSServiceTest.hs`
 
 4. Define a `_Foo` `Prism'` that combines the parsing/unparsing
    functions above:
