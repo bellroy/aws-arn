@@ -1,7 +1,7 @@
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Network.AWS.ARN.Test where
+module Network.AWS.ARNTest where
 
 import Data.List.NonEmpty (NonEmpty (..))
 import Data.Text (Text)

@@ -1,8 +1,9 @@
 # Revision history for aws-arn
 
-## Unreleased (patch)
+## 0.3.3.0 -- 2025-01-16
 
 * Remove direct dependency on `profunctors`.
+* Add `Network.AWS.ARN.States` with support for State Machine ARNs.
 
 ## 0.3.2.0 -- 2024-08-22
 
