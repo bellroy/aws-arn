@@ -58,7 +58,7 @@ common opts
 
 common deps
   build-depends:
-    , base             >=4.12   && <4.21
+    , base             >=4.12   && <4.22
     , deriving-compat  >=0.5.10 && <0.7
     , microlens-pro    ^>=0.2
     , tagged           ^>=0.8
