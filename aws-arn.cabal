@@ -45,6 +45,7 @@ tested-with:
    || ==9.6.6
    || ==9.8.2
    || ==9.10.1
+   || ==9.12.1
 
 common opts
   default-language: Haskell2010
