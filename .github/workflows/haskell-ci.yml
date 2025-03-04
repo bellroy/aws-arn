@@ -13,8 +13,8 @@ jobs:
         uses: "kleidukos/get-tested@a0aa3f2d4ab0d10daa49dc9ee8c706d673fb0e02"
         with:
           cabal-file: aws-arn.cabal
-          ubuntu-version: "20.04"
-          version: "0.1.7.1"
+          ubuntu-version: '20.04'
+          version: '0.1.7.1'
     timeout-minutes: 30
   tests:
     container:
@@ -177,7 +177,7 @@ jobs:
       - name: doctest
         run: |
           cd ${PKGDIR_PROJECT} || false
-          doctest  -XHaskell2010 src
+          doctest -XHaskell2010 src
       - name: cabal check
         run: |
           cd ${PKGDIR_PROJECT} || false
