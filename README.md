@@ -90,22 +90,3 @@ The formatters used in this repo are provided by `shell.nix`:
 - `*.nix`:
   [`nixpkgs-fmt`](https://github.com/nix-community/nixpkgs-fmt)
   (`nixpkgs-fmt *.nix`)
-
-## Regenerating CI
-
-This repo uses `haskell-ci`, which is provided by `shell.nix`:
-
-```shell
-haskell-ci regenerate
-```
-
-### Fixing CI not being able to install tools
-
-So you ran the above command but `haskell-ci` couldn't install one of its tools
-(e.g. `hlint`, `doctest`) due to version incompatibilities. `haskell-ci`
-selects particular versions by default, but this can be changed with command
-line flags (e.g. `--hlint-version '>=3.5 && <3.6'`, `--doctest-version ==0.20.1`).
-If you do this, please check
-[`haskell-ci`](https://github.com/haskell-CI/haskell-ci); if the HEAD version
-does not select the latest version of a tool, please contribute a PR to that
-repository.

@@ -13,8 +13,8 @@ jobs:
         uses: "kleidukos/get-tested@a0aa3f2d4ab0d10daa49dc9ee8c706d673fb0e02"
         with:
           cabal-file: aws-arn.cabal
-          ubuntu-version: '20.04'
-          version: '0.1.7.1'
+          ubuntu-version: "20.04"
+          version: "0.1.7.1"
     timeout-minutes: 30
   tests:
     container:
@@ -111,7 +111,7 @@ jobs:
           cabal-plan --version
       - name: install doctest
         run: |
-          $CABAL --store-dir=$HOME/.haskell-ci-tools/store v2-install $ARG_COMPILER --ignore-project -j2 doctest --constraint='doctest ^>=0.22.0'
+          $CABAL --store-dir=$HOME/.haskell-ci-tools/store v2-install $ARG_COMPILER --ignore-project -j2 doctest --constraint='doctest ^>=0.24.0'
           doctest --version
       - if: "always()"
         name: "save cache (tools)"
