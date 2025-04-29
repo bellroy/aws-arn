@@ -6,7 +6,7 @@
       url = "github:bellroy/bellroy-nix-foss";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixpkgs.url = "github:nixos/nixpkgs";
+    nixpkgs.url = "nixpkgs/nixpkgs-24.11-darwin";
   };
 
   outputs = inputs: inputs.bellroy-nix-foss.lib.haskellProject {
