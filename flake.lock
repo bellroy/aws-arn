@@ -4,9 +4,7 @@
       "inputs": {
         "flake-utils": "flake-utils",
         "git-hooks": "git-hooks",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
+        "nixpkgs": "nixpkgs"
       },
       "locked": {
         "lastModified": 1755522139,
@@ -103,23 +101,22 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1755457263,
-        "narHash": "sha256-R//8BJCL7LcjZbe2u2PD//Uipa+SEQoJY9OJHVQmWvA=",
+        "lastModified": 1755268003,
+        "narHash": "sha256-nNaeJjo861wFR0tjHDyCnHs1rbRtrMgxAKMoig9Sj/w=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "762eec09c0e9efc19f456a1970e11a5b229ac9ce",
+        "rev": "32f313e49e42f715491e1ea7b306a87c16fe0388",
         "type": "github"
       },
       "original": {
         "id": "nixpkgs",
-        "ref": "nixpkgs-25.05-darwin",
+        "ref": "nixpkgs-unstable",
         "type": "indirect"
       }
     },
     "root": {
       "inputs": {
-        "bellroy-nix-foss": "bellroy-nix-foss",
-        "nixpkgs": "nixpkgs"
+        "bellroy-nix-foss": "bellroy-nix-foss"
       }
     },
     "systems": {
