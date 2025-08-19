@@ -4,9 +4,7 @@
   inputs = {
     bellroy-nix-foss = {
       url = "github:bellroy/bellroy-nix-foss";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixpkgs.url = "nixpkgs/nixpkgs-25.05-darwin";
   };
 
   outputs =
@@ -23,6 +21,6 @@
         "ghc910"
         "ghc912"
       ];
-      defaultCompiler = "ghc96";
+      defaultCompiler = "ghc910";
     };
 }
