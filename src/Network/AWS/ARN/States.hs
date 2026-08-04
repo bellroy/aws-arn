@@ -31,8 +31,8 @@ import Lens.Micro.Pro (Prism', prism')
 --
 -- @since 0.3.3.0
 data StateMachine = StateMachine
-  { name :: Text
-  , qualifier :: Maybe Text
+  { name :: Text,
+    qualifier :: Maybe Text
   }
   deriving (Eq, Ord, Hashable, Show, Generic)
 
