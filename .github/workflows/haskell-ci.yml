@@ -5,9 +5,64 @@ on:
       - master
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  haskell-ci:
-    name: Haskell CI
-    uses: bellroy/actions/.github/workflows/haskell-os-ci.yaml@haskell-ci
-    with:
-      cabal-file-relative-path: aws-arn
+  matrix:
+    name: Generate matrix from cabal file
+    runs-on: ubuntu-slim
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - name: Extract the tested GHC versions
+        id: matrix
+        uses: kleidukos/get-tested@a55a250eac23bcc4bcd1cb22d77be61baea5a7e2
+        with:
+          cabal-file: aws-arn.cabal
+          ubuntu-version: latest
+
+  tests:
+    name: ${{ matrix.ghc }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    needs: [matrix]
+    timeout-minutes: 30
+    strategy:
+      matrix: ${{ fromJSON(needs.matrix.outputs.matrix) }}
+    steps:
+      - name: Generate App token
+        id: token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.GHA_APP_CLIENT_ID }}
+          private-key: ${{ secrets.GHA_APP_PRIVATE_KEY }}
+          repositories: actions
+
+      - name: Checkout action
+        uses: actions/checkout@v7
+        with:
+          repository: bellroy/actions
+          token: ${{ steps.token.outputs.token }}
+          sparse-checkout: haskell-os-ci
+          ref: haskell-ci
+          # ref: haskell-os-ci-v1
+
+      - name: Cabal test
+        uses: ./haskell-os-ci
+        with:
+          cabal-file-relative-path: aws-arn
+
+  tests-completion:
+    name: All tests jobs completed
+    runs-on: ubuntu-slim
+    if: ${{ !cancelled() }}
+    needs: [tests]
+    steps:
+      - name: Fan in matrix
+        run: |
+          if [[ "${{ needs.tests.result }}" == "failure" ]]; then
+            echo "::error::Testing one or more GHC versions have failed"
+            exit 1
+          else
+            echo "::info::All tests have succeeded"
+          fi
