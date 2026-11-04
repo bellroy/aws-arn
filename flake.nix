@@ -15,7 +15,6 @@
         "ghc810"
         "ghc90"
         "ghc92"
-        "ghc94"
         "ghc96"
         "ghc98"
         "ghc910"
