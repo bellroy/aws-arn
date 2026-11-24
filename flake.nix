@@ -11,10 +11,10 @@
     inputs:
     inputs.bellroy-nix-foss.lib.haskellProject {
       src = ./.;
+      # GHC 8.10, 9.0 and 9.2 are listed in tested-with in the cabal file
+      # but are no longer available in our nixpkgs channel. CI
+      # (haskell-ci) verifies these older versions still build.
       supportedCompilers = [
-        "ghc810"
-        "ghc90"
-        "ghc92"
         "ghc96"
         "ghc98"
         "ghc910"
